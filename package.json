@@ -1,0 +1,46 @@
+{
+  "name": "css-to-ts",
+  "version": "0.1.0",
+  "description": "css-to-ts takes css file and outputs TypeScript file with an exported string containing content of your css file.",
+  "main": "dist/css-to-ts.js",
+  "scripts": {
+    "build": "webpack",
+    "tslint": "tslint --project . --config ./tslint.json",
+    "watch": "webpack --watch",
+    "test": "tsc -p . --noEmit && npm run tslint",
+    "release": "npm run build && npm run uglifyjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SimplrJS/css-to-ts.git"
+  },
+  "keywords": [
+    "SimplrJS",
+    "css",
+    "Cascading",
+    "Style",
+    "Sheets",
+    "ts",
+    "Typescript",
+    "css-to-ts"
+  ],
+  "author": "Deividas Bakanas <deividas@quatrodev.com> (https://github.com/DeividasBakanas)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SimplrJS/css-to-ts/issues"
+  },
+  "homepage": "https://github.com/SimplrJS/css-to-ts#readme",
+  "devDependencies": {
+    "@types/glob": "^5.0.30",
+    "@types/yargs": "^6.6.0",
+    "ts-loader": "^2.0.3",
+    "tslint": "^5.0.0",
+    "typescript": "^2.2.2",
+    "uglify-js": "^2.8.21",
+    "webpack": "^2.3.3"
+  },
+  "dependencies": {
+    "glob": "^7.1.1",
+    "yargs": "^7.0.2"
+  }
+}
