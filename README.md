@@ -1,1 +1,1 @@
-# scss-to-ts
+# css-to-ts
