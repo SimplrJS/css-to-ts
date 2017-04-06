@@ -1,0 +1,1 @@
+# scss-to-ts
