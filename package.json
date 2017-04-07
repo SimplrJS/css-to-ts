@@ -4,9 +4,9 @@
   "description": "css-to-ts takes css file and outputs TypeScript file with an exported string containing content of your css file.",
   "main": "dist/css-to-ts.js",
   "scripts": {
-    "build": "webpack",
+    "build": "tsc -p .",
     "tslint": "tslint --project . --config ./tslint.json",
-    "watch": "webpack --watch",
+    "watch": "tsc -w",
     "test": "tsc -p . --noEmit && npm run tslint",
     "release": "npm run build && npm run uglifyjs"
   },
@@ -33,14 +33,13 @@
   "devDependencies": {
     "@types/glob": "^5.0.30",
     "@types/yargs": "^6.6.0",
-    "ts-loader": "^2.0.3",
     "tslint": "^5.0.0",
     "typescript": "^2.2.2",
-    "uglify-js": "^2.8.21",
-    "webpack": "^2.3.3"
+    "uglify-js": "^2.8.21"
   },
   "dependencies": {
     "glob": "^7.1.1",
     "yargs": "^7.0.2"
-  }
+  },
+  "engine": "node >= 5.0.0"
 }
