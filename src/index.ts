@@ -1,5 +1,4 @@
 import { Arguments } from "./arguments";
-import { Options } from "./contracts";
-import { CssToTs } from "./css-to-ts.js";
+import { Main } from "./main";
 
-new CssToTs(Arguments as Options);
+new Main(Arguments);
