@@ -47,5 +47,8 @@
     "mz": "^2.6.0",
     "yargs": "^7.0.2"
   },
-  "engine": "node >= 5.0.0"
+  "engine": "node >= 5.0.0",
+  "bin": {
+    "css-to-js": "./dist/cli.js"
+  }
 }
