@@ -31,18 +31,20 @@
   },
   "homepage": "https://github.com/SimplrJS/css-to-ts#readme",
   "devDependencies": {
-    "@types/chokidar": "^1.6.0",
-    "@types/glob": "^5.0.30",
-    "@types/mkdirp": "^0.3.29",
-    "@types/yargs": "^6.6.0",
     "tslint": "^5.0.0",
     "typescript": "^2.2.2",
     "uglify-js": "^2.8.21"
   },
   "dependencies": {
+    "@types/chokidar": "^1.6.0",
+    "@types/glob": "^5.0.30",
+    "@types/mkdirp": "^0.3.29",
+    "@types/yargs": "^6.6.0",
+    "@types/mz": "0.0.30",
     "chokidar": "^1.6.1",
     "glob": "^7.1.1",
     "mkdirp": "^0.5.1",
+    "mz": "^2.6.0",
     "yargs": "^7.0.2"
   },
   "engine": "node >= 5.0.0"

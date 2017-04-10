@@ -11,8 +11,7 @@ exports.Arguments = yargs
     return `CurrentVersion: ${GetVersion()}`;
 })
     .alias("v", "version")
-    .option("r", {
-    alias: "rootDir",
+    .option("rootDir", {
     describe: "Specifies the root directory of input file / files",
     type: "string"
 })
@@ -22,8 +21,7 @@ exports.Arguments = yargs
     describe: "Redirect output or structure to the file or directory."
 })
     .require("outDir", "outDir is required")
-    .option("p", {
-    alias: "pattern",
+    .option("pattern", {
     describe: "Files glob pattern",
     type: "string"
 })
@@ -48,13 +46,11 @@ exports.Arguments = yargs
     describe: "Specifies header comment in generated TS file",
     type: "string"
 })
-    .option("c", {
-    alias: "cwd",
+    .option("cwd", {
     describe: "Specifies current working diretory",
     type: "string"
 })
-    .options("d", {
-    alias: "delimitter",
+    .options("delimitter", {
     describe: "Specifies delimitter for prefix and suffix",
     type: "string"
 })

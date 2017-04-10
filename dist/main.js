@@ -10,40 +10,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const chokidar_1 = require("chokidar");
 const glob_1 = require("glob");
-const css_to_ts_1 = require("./css-to-ts");
+const converter_1 = require("./converter");
 class Main {
     constructor(options) {
         this.options = options;
         this.onWatchChange = (changedPath) => {
             console.log(`${changedPath} changed.`);
-            this.handleFile(changedPath);
+            this.convertFile(changedPath);
+            // TODO: remove this or check timing
             this.emitWatchMessage();
         };
         this.onWatchError = (error) => {
             console.log(error);
             this.emitWatchMessage();
         };
-        this.run();
-    }
-    run() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.options.cwd = this.options.cwd || process.cwd();
-            if (this.options.watch) {
-                this.watchCss();
-            }
-            else {
-                this.handleGlob();
-            }
-        });
+        this.options.cwd = this.options.cwd || process.cwd();
+        if (this.options.watch) {
+            this.watchCss();
+        }
+        else {
+            this.handleGlob();
+        }
     }
     handleGlob() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let filesArray = yield this.getFilesArray(this.options.pattern);
-                for (let index in filesArray) {
-                    if (index != null) {
-                        this.handleFile(filesArray[index]);
-                    }
+                for (let i = 0; i < filesArray.length; i++) {
+                    this.convertFile(filesArray[i]);
                 }
             }
             catch (error) {
@@ -79,20 +73,20 @@ class Main {
     emitWatchMessage() {
         console.log(`Watching for ${this.options.pattern}`);
     }
-    handleFile(filePath) {
+    convertFile(filePath) {
         let filePathData = path.parse(filePath);
         // this.options.cwd resolved in `private async run()`
         let cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
         let tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
-        let varName = this.formVarName(filePathData.name);
-        let tsFileName = this.formFileName(filePathData.name, ".ts");
-        new css_to_ts_1.CssToTs(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
+        let varName = this.constructVarName(filePathData.name);
+        let tsFileName = this.constructFileName(filePathData.name, ".ts");
+        new converter_1.Converter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
     }
-    formVarName(fileName) {
-        let newName = this.formFileName(fileName);
+    constructVarName(fileName) {
+        let newName = this.constructFileName(fileName);
         return this.kebabCaseToCamelCase(newName);
     }
-    formFileName(fileName, extension) {
+    constructFileName(fileName, extension) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimitter) {
             throw new Error("You MUST define a delimitter when using prefix or suffix. -h for more information.");
         }

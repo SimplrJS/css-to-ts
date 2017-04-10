@@ -1,1 +1,2 @@
-export declare var Arguments: any;
+import { Options } from "./contracts";
+export declare var Arguments: Options;
