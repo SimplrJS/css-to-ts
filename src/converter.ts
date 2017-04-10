@@ -3,8 +3,6 @@ import * as path from "path";
 import * as mkdirp from "mkdirp";
 import { CssToTs } from "./css-to-ts";
 
-export type ReadCallback = (err: NodeJS.ErrnoException, data: Buffer) => void;
-
 export class Converter {
     constructor(
         private tsDir: string,
@@ -12,7 +10,8 @@ export class Converter {
         private cssDir: string,
         private cssFileName: string,
         private varName: string,
-        private header?: string
+        private header?: string,
+        private removeSource?: boolean
     ) {
         this.main();
     }
@@ -36,6 +35,11 @@ export class Converter {
             }
 
             await fs.writeFile(tsPath, tsContent);
+
+            if (this.removeSource === true) {
+                await fs.unlink(cssPath);
+            }
+
             console.log(`TS file ${tsPath} successfully emitted.`);
         } catch (error) {
             console.log(error);

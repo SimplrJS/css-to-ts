@@ -82,7 +82,15 @@ export class CLIHandler {
         let varName = this.constructVarName(filePathData.name);
         let tsFileName = this.constructFileName(filePathData.name, ".ts");
 
-        new Converter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
+        new Converter(
+            tsDir,
+            tsFileName,
+            cssDir,
+            filePathData.base,
+            varName,
+            this.options.header,
+            this.options.removeSource
+        );
     }
 
     private constructVarName(fileName: string) {
