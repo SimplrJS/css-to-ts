@@ -2,7 +2,7 @@ import * as path from "path";
 import { watch } from "chokidar";
 import { Glob } from "glob";
 import { Options } from "./contracts";
-import { CssToTs } from "./css-to-ts";
+import { Converter } from "./converter";
 
 export class Main {
     constructor(private options: Options) {
@@ -87,7 +87,7 @@ export class Main {
         let varName = this.formVarName(filePathData.name);
         let tsFileName = this.formFileName(filePathData.name, ".ts");
 
-        new CssToTs(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
+        new Converter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
     }
 
     private formVarName(fileName: string) {
