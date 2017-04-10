@@ -6,10 +6,6 @@ import { Converter } from "./converter";
 
 export class Main {
     constructor(private options: Options) {
-        this.run();
-    }
-
-    private async run() {
         this.options.cwd = this.options.cwd || process.cwd();
 
         if (this.options.watch) {
@@ -23,10 +19,8 @@ export class Main {
         try {
             let filesArray = await this.getFilesArray(this.options.pattern);
 
-            for (let index in filesArray) {
-                if (index != null) {
-                    this.handleFile(filesArray[index]);
-                }
+            for (let i = 0; i < filesArray.length; i++) {
+                this.convertFile(filesArray[i]);
             }
         } catch (error) {
             console.log(error);
@@ -64,7 +58,8 @@ export class Main {
 
     private onWatchChange = (changedPath: string) => {
         console.log(`${changedPath} changed.`);
-        this.handleFile(changedPath);
+        this.convertFile(changedPath);
+        // TODO: remove this or check timing
         this.emitWatchMessage();
     }
 
@@ -77,25 +72,25 @@ export class Main {
         console.log(`Watching for ${this.options.pattern}`);
     }
 
-    private handleFile(filePath: string) {
+    private convertFile(filePath: string) {
         let filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
         let cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
         let tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
-        let varName = this.formVarName(filePathData.name);
-        let tsFileName = this.formFileName(filePathData.name, ".ts");
+        let varName = this.constructVarName(filePathData.name);
+        let tsFileName = this.constructFileName(filePathData.name, ".ts");
 
         new Converter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
     }
 
-    private formVarName(fileName: string) {
-        let newName = this.formFileName(fileName);
+    private constructVarName(fileName: string) {
+        let newName = this.constructFileName(fileName);
         return this.kebabCaseToCamelCase(newName);
     }
 
-    private formFileName(fileName: string, extension?: string) {
+    private constructFileName(fileName: string, extension?: string) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimitter) {
             throw new Error("You MUST define a delimitter when using prefix or suffix. -h for more information.");
         }

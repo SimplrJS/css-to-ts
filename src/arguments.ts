@@ -1,4 +1,5 @@
 import * as yargs from "yargs";
+import { Options } from "./contracts";
 
 function GetVersion() {
     let packageJson = require("../package.json");
@@ -55,4 +56,4 @@ export var Arguments = yargs
         describe: "Specifies delimitter for prefix and suffix",
         type: "string"
     })
-    .argv;
+    .argv as Options;

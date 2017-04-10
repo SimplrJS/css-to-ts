@@ -22,7 +22,7 @@ export class Converter {
             const tsPath = path.join(this.tsDir, this.tsFileName);
             const cssPath = path.join(this.cssDir, this.cssFileName);
 
-            console.log(`Reading css from ${tsPath}.`);
+            console.log(`Reading css from ${cssPath}.`);
             const stringifiedCss = await fs.readFile(cssPath, "utf-8");
             const tsContent = CssToTs(stringifiedCss, this.varName, this.header);
 
@@ -36,7 +36,7 @@ export class Converter {
             }
 
             await fs.writeFile(tsPath, tsContent);
-            console.log(`TS file ${this.cssDir} successfully emitted.`);
+            console.log(`TS file ${tsPath} successfully emitted.`);
         } catch (error) {
             console.log(error);
         }
