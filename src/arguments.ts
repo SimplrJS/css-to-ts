@@ -28,6 +28,7 @@ export var Arguments = yargs
         describe: "Files glob pattern",
         type: "string"
     })
+    .require("pattern", "pattern is required")
     .option("w", {
         alias: "watch",
         describe: "Watch file or files structure.",
@@ -46,6 +47,16 @@ export var Arguments = yargs
     })
     .option("header", {
         describe: "Specifies header comment in generated TS file",
+        type: "string"
+    })
+    .option("c", {
+        alias: "cwd",
+        describe: "Specifies current working diretory",
+        type: "string"
+    })
+    .options("d", {
+        alias: "delimitter",
+        describe: "Specifies delimitter for prefix and suffix",
         type: "string"
     })
     .argv;

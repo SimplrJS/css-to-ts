@@ -5,7 +5,6 @@ export interface Options extends CSSToTsOptions {
     cwd?: string;
     delimitter?: string;
 }
-
 export interface CSSToTsOptions {
     rootDir: string;
     outDir: string;
