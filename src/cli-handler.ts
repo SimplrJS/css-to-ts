@@ -4,7 +4,7 @@ import { Glob } from "glob";
 import { Options } from "./contracts";
 import { Converter } from "./converter";
 
-export class Main {
+export class CLIHandler {
     constructor(private options: Options) {
         this.options.cwd = this.options.cwd || process.cwd();
 
