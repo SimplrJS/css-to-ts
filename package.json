@@ -48,6 +48,6 @@
   },
   "engine": "node >= 5.0.0",
   "bin": {
-    "css-to-js": "./dist/cli.js"
+    "css-to-ts": "./dist/cli.js"
   }
 }
