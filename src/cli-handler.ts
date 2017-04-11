@@ -1,12 +1,27 @@
+import { Glob } from "glob";
 import * as path from "path";
 import { watch } from "chokidar";
-import { Glob } from "glob";
 import { Options } from "./contracts";
 import { Converter } from "./converter";
+import { EmitError } from "./helpers";
 
 export class CLIHandler {
     constructor(private options: Options) {
         this.options.cwd = this.options.cwd || process.cwd();
+
+        if (!this.options.pattern) {
+            EmitError("Pattern cannot be undefined, null or empty string.");
+            return;
+        }
+
+        if (!this.options.rootDir) {
+            EmitError("rootDir cannot be undefined, null or empty string.");
+            return;
+        }
+
+        if (!this.options.outDir) {
+            EmitError("outDir cannot be undefined, null or empty string.");
+        }
 
         if (this.options.watch) {
             this.watchCss();
@@ -18,9 +33,8 @@ export class CLIHandler {
     private async handleGlob() {
         try {
             let filesArray = await this.getFilesArray(this.options.pattern);
-
             for (let i = 0; i < filesArray.length; i++) {
-                this.convertFile(filesArray[i]);
+                await this.convertFile(filesArray[i]);
             }
         } catch (error) {
             console.log(error);
@@ -56,10 +70,9 @@ export class CLIHandler {
         watcher.on("error", this.onWatchError);
     }
 
-    private onWatchChange = (changedPath: string) => {
+    private onWatchChange = async (changedPath: string) => {
         console.log(`${changedPath} changed.`);
-        this.convertFile(changedPath);
-        // TODO: remove this or check timing
+        await this.convertFile(changedPath);
         this.emitWatchMessage();
     }
 
@@ -72,7 +85,7 @@ export class CLIHandler {
         console.log(`Watching for ${this.options.pattern}`);
     }
 
-    private convertFile(filePath: string) {
+    private async convertFile(filePath: string) {
         let filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
@@ -82,7 +95,7 @@ export class CLIHandler {
         let varName = this.constructVarName(filePathData.name);
         let tsFileName = this.constructFileName(filePathData.name, ".ts");
 
-        new Converter(
+        const converter = new Converter(
             tsDir,
             tsFileName,
             cssDir,
@@ -91,6 +104,26 @@ export class CLIHandler {
             this.options.header,
             this.options.removeSource
         );
+
+        try {
+            await converter.Convert();
+        } catch (error) {
+            const exception = error as NodeJS.ErrnoException;
+
+            switch (exception.errno) {
+                case -4058: {
+                    EmitError("File or directory not found. Please check rootDir or pattern. " +
+                        `Message: ${exception.message}`);
+                    break;
+                }
+                case -4075: {
+                    EmitError("Cannot create directory that already exists. " +
+                        `Please Check TSDir and outDir. Message: ${exception.message}`);
+                    break;
+                }
+                default: EmitError(error);
+            }
+        }
     }
 
     private constructVarName(fileName: string) {

@@ -2,6 +2,7 @@ import { fs } from "mz";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
 import { CssToTs } from "./css-to-ts";
+import { EmitError } from "./helpers";
 
 export class Converter {
     constructor(
@@ -12,38 +13,41 @@ export class Converter {
         private varName: string,
         private header?: string,
         private removeSource?: boolean
-    ) {
-        this.main();
-    }
+    ) { }
 
-    async main() {
+    public async Convert() {
+        const tsPath = path.join(this.tsDir, this.tsFileName);
+        const cssPath = path.join(this.cssDir, this.cssFileName);
+
+        console.log(`Reading css from ${cssPath}.`);
+        const stringifiedCss = await fs.readFile(cssPath, "utf-8");
+        const tsContent = CssToTs(stringifiedCss, this.varName, this.header);
+
         try {
-            const tsPath = path.join(this.tsDir, this.tsFileName);
-            const cssPath = path.join(this.cssDir, this.cssFileName);
-
-            console.log(`Reading css from ${cssPath}.`);
-            const stringifiedCss = await fs.readFile(cssPath, "utf-8");
-            const tsContent = CssToTs(stringifiedCss, this.varName, this.header);
-
-            const dirExists = await fs.stat(this.tsDir);
-
-            if (dirExists.isDirectory()) {
-                await this.makeDirRecursively(this.tsDir);
-            } else {
-                // TODO: specify error
-                throw new Error(`${this.tsDir} is not a directory.`);
+            const dirStats = await fs.stat(this.tsDir);
+            if (!dirStats.isDirectory()) {
+                EmitError(`Output directory ${this.tsDir} is not a directory.`);
+                return;
             }
-
-            await fs.writeFile(tsPath, tsContent);
-
-            if (this.removeSource === true) {
-                await fs.unlink(cssPath);
-            }
-
-            console.log(`TS file ${tsPath} successfully emitted.`);
         } catch (error) {
-            console.log(error);
+            const exception = error as NodeJS.ErrnoException;
+            switch (exception.errno) {
+                case -4058:
+                    await this.makeDirRecursively(this.tsDir);
+                    break;
+                default: {
+                    throw new Error(error);
+                }
+            }
         }
+
+        await fs.writeFile(tsPath, tsContent);
+
+        if (this.removeSource === true) {
+            await fs.unlink(cssPath);
+        }
+
+        console.log(`TS file ${tsPath} successfully emitted.`);
     }
 
     private async makeDirRecursively(dirPath: string) {
