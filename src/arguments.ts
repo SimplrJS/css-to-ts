@@ -24,7 +24,7 @@ export var Arguments = yargs
     })
     .require("outDir", "outDir is required")
     .option("pattern", {
-        describe: "Files glob pattern",
+        describe: "Files glob pattern.",
         type: "string"
     })
     .require("pattern", "pattern is required")
@@ -42,19 +42,19 @@ export var Arguments = yargs
         type: "string"
     })
     .option("removeSource", {
-        describe: "Specifies should the source CSS file should be removed",
+        describe: "Specifies should the source CSS file should be removed.",
         type: "boolean"
     })
     .option("header", {
-        describe: "Specifies header comment in generated TS file",
+        describe: "Specifies header comment in generated TS file.",
         type: "string"
     })
     .option("cwd", {
-        describe: "Specifies current working diretory",
+        describe: "Specifies current working diretory.",
         type: "string"
     })
     .options("delimitter", {
-        describe: "Specifies delimitter for prefix and suffix",
+        describe: "Specifies delimitter for prefix and suffix.",
         type: "string"
     })
     .argv as Options;
