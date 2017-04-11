@@ -28,11 +28,11 @@ $ npm install css-to-ts
 | -o, --outDir <sup>[*]</sup>   | string    |                   | Redirect output structure to the directory.                                   |
 | --pattern <sup>[*]</sup>      | string    |                   | Files glob pattern.                                                           |
 | -w, --watch                   | boolean   | `false`           | Watch for changes of input files.                                             |
-| --prefix                      | string    | ``                | Prefix added to ouput file name.                                              |
-| --suffix                      | string    | ``                | Suffix added to output file name.                                             |
-| --delimitter                  | string    | ``                | Specifies delimitter for prefix and suffix. Required if one of these are set. |
+| --prefix                      | string    |                   | Prefix added to ouput file name.                                              |
+| --suffix                      | string    |                   | Suffix added to output file name.                                             |
+| --delimitter                  | string    |                   | Specifies delimitter for prefix and suffix. Required if one of these are set. |
 | --removeSource                | boolean   | `false`           | Remove all source files specified by glob pattern.                            |
-| --header                      | string    | ``                | Specifies header comment in generated TS file.                                |
+| --header                      | string    |                   | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`   | Specifies current working directory.                                          |
 
 <sup>[*]</sup> - argument required.
