@@ -8,7 +8,7 @@
     "tslint": "tslint --project . --config ./tslint.json",
     "watch": "tsc -w",
     "test": "tsc -p . --noEmit && npm run tslint",
-    "release": "npm run build && npm run tslint && npm run glob-uglifyjs"
+    "release": "npm run build && npm run tslint"
   },
   "repository": {
     "type": "git",
