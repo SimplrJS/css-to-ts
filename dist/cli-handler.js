@@ -7,24 +7,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const glob_1 = require("glob");
 const path = require("path");
 const chokidar_1 = require("chokidar");
-const glob_1 = require("glob");
-const converter_1 = require("./converter");
-class Main {
+const css_to_ts_converter_1 = require("./css-to-ts-converter");
+const helpers_1 = require("./helpers");
+class CLIHandler {
     constructor(options) {
         this.options = options;
-        this.onWatchChange = (changedPath) => {
+        this.onWatchChange = (changedPath) => __awaiter(this, void 0, void 0, function* () {
             console.log(`${changedPath} changed.`);
-            this.convertFile(changedPath);
-            // TODO: remove this or check timing
+            yield this.convertFile(changedPath);
             this.emitWatchMessage();
-        };
+        });
         this.onWatchError = (error) => {
             console.log(error);
             this.emitWatchMessage();
         };
         this.options.cwd = this.options.cwd || process.cwd();
+        if (!this.options.pattern) {
+            helpers_1.EmitError("Pattern cannot be undefined, null or empty string.");
+            return;
+        }
+        if (!this.options.rootDir) {
+            helpers_1.EmitError("rootDir cannot be undefined, null or empty string.");
+            return;
+        }
+        if (!this.options.outDir) {
+            helpers_1.EmitError("outDir cannot be undefined, null or empty string.");
+        }
         if (this.options.watch) {
             this.watchCss();
         }
@@ -37,7 +48,7 @@ class Main {
             try {
                 let filesArray = yield this.getFilesArray(this.options.pattern);
                 for (let i = 0; i < filesArray.length; i++) {
-                    this.convertFile(filesArray[i]);
+                    yield this.convertFile(filesArray[i]);
                 }
             }
             catch (error) {
@@ -74,17 +85,38 @@ class Main {
         console.log(`Watching for ${this.options.pattern}`);
     }
     convertFile(filePath) {
-        let filePathData = path.parse(filePath);
-        // this.options.cwd resolved in `private async run()`
-        let cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
-        let tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
-        let varName = this.constructVarName(filePathData.name);
-        let tsFileName = this.constructFileName(filePathData.name, ".ts");
-        new converter_1.Converter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header);
+        return __awaiter(this, void 0, void 0, function* () {
+            let filePathData = path.parse(filePath);
+            // this.options.cwd resolved in `private async run()`
+            let cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
+            let tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
+            let varName = this.constructVarName(filePathData.name);
+            let tsFileName = this.constructFileName(filePathData.name, ".ts");
+            const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource);
+            try {
+                yield converter.Convert();
+            }
+            catch (error) {
+                const exception = error;
+                switch (exception.errno) {
+                    case -4058: {
+                        helpers_1.EmitError("File or directory not found. Please check rootDir or pattern. " +
+                            `Message: ${exception.message}`);
+                        break;
+                    }
+                    case -4075: {
+                        helpers_1.EmitError("Cannot create directory that already exists. " +
+                            `Please Check TSDir and outDir. Message: ${exception.message}`);
+                        break;
+                    }
+                    default: helpers_1.EmitError(error);
+                }
+            }
+        });
     }
     constructVarName(fileName) {
         let newName = this.constructFileName(fileName);
-        return this.kebabCaseToCamelCase(newName);
+        return this.snakeCaseToCamelCase(newName);
     }
     constructFileName(fileName, extension) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimitter) {
@@ -101,11 +133,11 @@ class Main {
         newName += extension || "";
         return newName;
     }
-    kebabCaseToCamelCase(fileName) {
+    snakeCaseToCamelCase(fileName) {
         let regex = /(\w*)(\-*)/g;
         return fileName.replace(regex, (match, word, delimitter) => {
             return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
         });
     }
 }
-exports.Main = Main;
+exports.CLIHandler = CLIHandler;

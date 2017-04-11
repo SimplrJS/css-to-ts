@@ -40,7 +40,8 @@ exports.Arguments = yargs
     type: "string"
 })
     .option("removeSource", {
-    describe: "Specifies should the source CSS file should be removed"
+    describe: "Specifies should the source CSS file should be removed",
+    type: "boolean"
 })
     .option("header", {
     describe: "Specifies header comment in generated TS file",

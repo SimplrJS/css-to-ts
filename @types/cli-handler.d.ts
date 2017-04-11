@@ -1,5 +1,5 @@
 import { Options } from "./contracts";
-export declare class Main {
+export declare class CLIHandler {
     private options;
     constructor(options: Options);
     private handleGlob();
@@ -11,5 +11,5 @@ export declare class Main {
     private convertFile(filePath);
     private constructVarName(fileName);
     private constructFileName(fileName, extension?);
-    private kebabCaseToCamelCase(fileName);
+    private snakeCaseToCamelCase(fileName);
 }

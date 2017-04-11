@@ -8,7 +8,7 @@
     "tslint": "tslint --project . --config ./tslint.json",
     "watch": "tsc -w",
     "test": "tsc -p . --noEmit && npm run tslint",
-    "release": "npm run build && npm run uglifyjs"
+    "release": "npm run build && npm run tslint && npm run glob-uglifyjs"
   },
   "repository": {
     "type": "git",
@@ -32,8 +32,7 @@
   "homepage": "https://github.com/SimplrJS/css-to-ts#readme",
   "devDependencies": {
     "tslint": "^5.0.0",
-    "typescript": "^2.2.2",
-    "uglify-js": "^2.8.21"
+    "typescript": "^2.2.2"
   },
   "dependencies": {
     "@types/chokidar": "^1.6.0",
