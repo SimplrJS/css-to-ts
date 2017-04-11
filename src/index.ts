@@ -1,5 +1,5 @@
 export { Arguments } from "./arguments";
 export { CLIHandler } from "./cli-handler";
-export { Converter } from "./converter";
-export { CssToTs } from "./css-to-ts";
+export { CssToTsConverter } from "./css-to-ts-converter";
+export { ConvertCssToTs } from "./css-to-ts";
 export { Options, CSSToTsOptions } from "./contracts";

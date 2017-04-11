@@ -1,10 +1,10 @@
 import { fs } from "mz";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
-import { CssToTs } from "./css-to-ts";
+import { ConvertCssToTs } from "./css-to-ts";
 import { EmitError } from "./helpers";
 
-export class Converter {
+export class CssToTsConverter {
     constructor(
         private tsDir: string,
         private tsFileName: string,
@@ -21,7 +21,7 @@ export class Converter {
 
         console.log(`Reading css from ${cssPath}.`);
         const stringifiedCss = await fs.readFile(cssPath, "utf-8");
-        const tsContent = CssToTs(stringifiedCss, this.varName, this.header);
+        const tsContent = ConvertCssToTs(stringifiedCss, this.varName, this.header);
 
         try {
             const dirStats = await fs.stat(this.tsDir);

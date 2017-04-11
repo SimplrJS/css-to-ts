@@ -2,7 +2,7 @@ import { Glob } from "glob";
 import * as path from "path";
 import { watch } from "chokidar";
 import { Options } from "./contracts";
-import { Converter } from "./converter";
+import { CssToTsConverter } from "./css-to-ts-converter";
 import { EmitError } from "./helpers";
 
 export class CLIHandler {
@@ -95,7 +95,7 @@ export class CLIHandler {
         let varName = this.constructVarName(filePathData.name);
         let tsFileName = this.constructFileName(filePathData.name, ".ts");
 
-        const converter = new Converter(
+        const converter = new CssToTsConverter(
             tsDir,
             tsFileName,
             cssDir,
