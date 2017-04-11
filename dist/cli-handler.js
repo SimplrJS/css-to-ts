@@ -25,17 +25,9 @@ class CLIHandler {
             this.emitWatchMessage();
         };
         this.options.cwd = this.options.cwd || process.cwd();
-        if (!this.options.pattern) {
-            helpers_1.EmitError("Pattern cannot be undefined, null or empty string.");
-            return;
-        }
-        if (!this.options.rootDir) {
-            helpers_1.EmitError("rootDir cannot be undefined, null or empty string.");
-            return;
-        }
-        if (!this.options.outDir) {
-            helpers_1.EmitError("outDir cannot be undefined, null or empty string.");
-        }
+        this.options.rootDir = this.options.rootDir || helpers_1.CLIDefaults.rootDir;
+        this.options.outDir = this.options.outDir || helpers_1.CLIDefaults.outDir;
+        this.options.pattern = this.options.pattern || helpers_1.CLIDefaults.pattern;
         if (this.options.watch) {
             this.watchCss();
         }

@@ -12,20 +12,17 @@ exports.Arguments = yargs
 })
     .alias("v", "version")
     .option("rootDir", {
-    describe: "Specifies the root directory of input file / files",
+    describe: "Specifies the root directory of input file / files.",
     type: "string"
 })
-    .require("rootDir", "rootDir is required")
-    .option("o", {
-    alias: "outDir",
-    describe: "Redirect output or structure to the file or directory."
+    .option("outDir", {
+    describe: "Redirect output or structure to the file or directory.",
+    type: "string"
 })
-    .require("outDir", "outDir is required")
     .option("pattern", {
     describe: "Files glob pattern.",
     type: "string"
 })
-    .require("pattern", "pattern is required")
     .option("w", {
     alias: "watch",
     describe: "Watch file or files structure.",

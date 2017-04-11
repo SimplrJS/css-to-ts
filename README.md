@@ -24,9 +24,9 @@ $ npm install css-to-ts
 |-------------------------------|-----------|-------------------|-------------------------------------------------------------------------------|
 | -h, --help                    | boolean   | `false`           | Show help.                                                                    |
 | -v, --version                 | boolean   | `false`           | Show current version.                                                         |
-| --rootDir <sup>[*]</sup>      | string    |                   | Specifies the root directory of input files.                                  |
-| -o, --outDir <sup>[*]</sup>   | string    |                   | Redirect output structure to the directory.                                   |
-| --pattern <sup>[*]</sup>      | string    |                   | Files glob pattern.                                                           |
+| --rootDir <sup>[*]</sup>      | string    | `./`              | Specifies the root directory of input files.                                  |
+| -o, --outDir <sup>[*]</sup>   | string    | `./`              | Redirect output structure to the directory.                                   |
+| --pattern <sup>[*]</sup>      | string    | `**/*.css`        | Files glob pattern.                                                           |
 | -w, --watch                   | boolean   | `false`           | Watch for changes of input files.                                             |
 | --prefix                      | string    |                   | Prefix added to ouput file name.                                              |
 | --suffix                      | string    |                   | Suffix added to output file name.                                             |

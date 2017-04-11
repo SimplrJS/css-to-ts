@@ -3,25 +3,14 @@ import * as path from "path";
 import { watch } from "chokidar";
 import { Options } from "./contracts";
 import { CssToTsConverter } from "./css-to-ts-converter";
-import { EmitError } from "./helpers";
+import { EmitError, CLIDefaults } from "./helpers";
 
 export class CLIHandler {
     constructor(private options: Options) {
         this.options.cwd = this.options.cwd || process.cwd();
-
-        if (!this.options.pattern) {
-            EmitError("Pattern cannot be undefined, null or empty string.");
-            return;
-        }
-
-        if (!this.options.rootDir) {
-            EmitError("rootDir cannot be undefined, null or empty string.");
-            return;
-        }
-
-        if (!this.options.outDir) {
-            EmitError("outDir cannot be undefined, null or empty string.");
-        }
+        this.options.rootDir = this.options.rootDir || CLIDefaults.rootDir;
+        this.options.outDir = this.options.outDir || CLIDefaults.outDir;
+        this.options.pattern = this.options.pattern || CLIDefaults.pattern;
 
         if (this.options.watch) {
             this.watchCss();
