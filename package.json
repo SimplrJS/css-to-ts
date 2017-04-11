@@ -1,6 +1,6 @@
 {
   "name": "css-to-ts",
-  "version": "0.1.0",
+  "version": "0.1.0-beta",
   "description": "css-to-ts takes css file and outputs TypeScript file with an exported string containing content of your css file.",
   "main": "dist/index.js",
   "scripts": {
