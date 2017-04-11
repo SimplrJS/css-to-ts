@@ -95,7 +95,7 @@ export class CLIHandler {
 
     private constructVarName(fileName: string) {
         let newName = this.constructFileName(fileName);
-        return this.kebabCaseToCamelCase(newName);
+        return this.snakeCaseToCamelCase(newName);
     }
 
     private constructFileName(fileName: string, extension?: string) {
@@ -119,7 +119,7 @@ export class CLIHandler {
         return newName;
     }
 
-    private kebabCaseToCamelCase(fileName: string) {
+    private snakeCaseToCamelCase(fileName: string) {
         let regex = /(\w*)(\-*)/g;
         return fileName.replace(regex, (match: string, word: string, delimitter: string) => {
             return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
