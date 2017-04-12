@@ -25,12 +25,12 @@ $ npm install css-to-ts
 | -h, --help                    | boolean   | `false`           | Show help.                                                                    |
 | -v, --version                 | boolean   | `false`           | Show current version.                                                         |
 | --rootDir                     | string    | `./`              | Specifies the root directory of input files.                                  |
-| -o, --outDir                  | string    | `./`              | Redirect output structure to the directory.                                   |
+| --outDir                      | string    | `./`              | Redirect output structure to the directory.                                   |
 | --pattern                     | string    | `**/*.css`        | Files glob pattern.                                                           |
 | -w, --watch                   | boolean   | `false`           | Watch for changes of input files.                                             |
 | --prefix                      | string    |                   | Prefix added to ouput file name.                                              |
 | --suffix                      | string    |                   | Suffix added to output file name.                                             |
-| --delimitter                  | string    |                   | Specifies delimitter for prefix and suffix. Required if one of these are set. |
+| --delimitter                  | string    | `-`               | Specifies delimitter for prefix and suffix. Required if one of these are set. |
 | --removeSource                | boolean   | `false`           | Remove all source files specified by glob pattern.                            |
 | --header                      | string    |                   | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`   | Specifies current working directory.                                          |
@@ -38,7 +38,7 @@ $ npm install css-to-ts
 ## Example
 
 ```sh
-$  node ./dist/cli.js --rootDir "./src" --outDir "./dist" --pattern "*.css" --header "File generated with css-to-ts"
+$  css-to-ts --rootDir "./src" --outDir "./dist" --pattern "*.css" --header "File generated with css-to-ts"
 ```
 
 Input file `./src/orange.css`

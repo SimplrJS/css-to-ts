@@ -11,6 +11,7 @@ export class CLIHandler {
         this.options.rootDir = this.options.rootDir || CLIDefaults.rootDir;
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
+        this.options.delimitter = this.options.delimitter || CLIDefaults.delimitter;
 
         if (this.options.watch) {
             this.watchCss();

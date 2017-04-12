@@ -7,7 +7,8 @@ exports.EmitError = EmitError;
 exports.CLIDefaults = {
     pattern: "**/*.css",
     rootDir: "./",
-    outDir: "./"
+    outDir: "./",
+    delimitter: "-"
 };
 function IsNodeError(error) {
     return (error != null && error.errno != null);

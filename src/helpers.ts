@@ -9,7 +9,8 @@ export function EmitError(message: string) {
 export var CLIDefaults: Options = {
     pattern: "**/*.css",
     rootDir: "./",
-    outDir: "./"
+    outDir: "./",
+    delimitter: "-"
 };
 
 export function IsNodeError(error: any): error is NodeJS.ErrnoException {
