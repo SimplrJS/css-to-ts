@@ -44,7 +44,7 @@ class CLIHandler {
                 }
             }
             catch (error) {
-                console.log(error);
+                helpers_1.EmitError(error);
             }
         });
     }
@@ -89,19 +89,22 @@ class CLIHandler {
                 yield converter.Convert();
             }
             catch (error) {
-                const exception = error;
-                switch (exception.errno) {
+                if (!helpers_1.IsNodeError(error)) {
+                    helpers_1.EmitError(error);
+                    return;
+                }
+                switch (error.errno) {
                     case -4058: {
                         helpers_1.EmitError("File or directory not found. Please check rootDir or pattern. " +
-                            `Message: ${exception.message}`);
+                            `Message: ${error.message}`);
                         break;
                     }
                     case -4075: {
                         helpers_1.EmitError("Cannot create directory that already exists. " +
-                            `Please Check TSDir and outDir. Message: ${exception.message}`);
+                            `Please Check TSDir and outDir. Message: ${error.message}`);
                         break;
                     }
-                    default: helpers_1.EmitError(error);
+                    default: helpers_1.EmitError(error.message);
                 }
             }
         });

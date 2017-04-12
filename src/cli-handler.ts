@@ -3,7 +3,7 @@ import * as path from "path";
 import { watch } from "chokidar";
 import { Options } from "./contracts";
 import { CssToTsConverter } from "./css-to-ts-converter";
-import { EmitError, CLIDefaults } from "./helpers";
+import { EmitError, CLIDefaults, IsNodeError } from "./helpers";
 
 export class CLIHandler {
     constructor(private options: Options) {
@@ -26,7 +26,7 @@ export class CLIHandler {
                 await this.convertFile(filesArray[i]);
             }
         } catch (error) {
-            console.log(error);
+            EmitError(error);
         }
     }
 
@@ -97,20 +97,23 @@ export class CLIHandler {
         try {
             await converter.Convert();
         } catch (error) {
-            const exception = error as NodeJS.ErrnoException;
+            if (!IsNodeError(error)) {
+                EmitError(error);
+                return;
+            }
 
-            switch (exception.errno) {
+            switch (error.errno) {
                 case -4058: {
                     EmitError("File or directory not found. Please check rootDir or pattern. " +
-                        `Message: ${exception.message}`);
+                        `Message: ${error.message}`);
                     break;
                 }
                 case -4075: {
                     EmitError("Cannot create directory that already exists. " +
-                        `Please Check TSDir and outDir. Message: ${exception.message}`);
+                        `Please Check TSDir and outDir. Message: ${error.message}`);
                     break;
                 }
-                default: EmitError(error);
+                default: EmitError(error.message);
             }
         }
     }

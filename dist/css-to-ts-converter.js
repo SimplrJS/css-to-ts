@@ -37,13 +37,15 @@ class CssToTsConverter {
                 }
             }
             catch (error) {
-                const exception = error;
-                switch (exception.errno) {
+                if (!helpers_1.IsNodeError(error)) {
+                    throw error;
+                }
+                switch (error.errno) {
                     case -4058:
                         yield this.makeDirRecursively(this.tsDir);
                         break;
                     default: {
-                        throw new Error(error);
+                        throw error;
                     }
                 }
             }

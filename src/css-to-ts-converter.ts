@@ -2,7 +2,7 @@ import { fs } from "mz";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
 import { ConvertCssToTs } from "./css-to-ts";
-import { EmitError } from "./helpers";
+import { EmitError, IsNodeError } from "./helpers";
 
 export class CssToTsConverter {
     constructor(
@@ -30,13 +30,16 @@ export class CssToTsConverter {
                 return;
             }
         } catch (error) {
-            const exception = error as NodeJS.ErrnoException;
-            switch (exception.errno) {
+            if (!IsNodeError(error)) {
+                throw error;
+            }
+
+            switch (error.errno) {
                 case -4058:
                     await this.makeDirRecursively(this.tsDir);
                     break;
                 default: {
-                    throw new Error(error);
+                    throw error;
                 }
             }
         }

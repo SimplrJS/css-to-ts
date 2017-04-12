@@ -8,9 +8,9 @@ $ npm install css-to-ts
 ```
 
 ## Features
-- Takes css file and outputs TypeScript file with exported string containing content of your css file.
-- CLI tooling for watching and files compilation.
-- Works with glob patterns.
+- Takes css files and output TypeScript files with exported string containing content of your css file.
+- CLI tool for watching and files compilation.
+- Works with [node-glob](https://github.com/isaacs/node-glob) pattern.
 
 ## Command line
 
@@ -24,9 +24,9 @@ $ npm install css-to-ts
 |-------------------------------|-----------|-------------------|-------------------------------------------------------------------------------|
 | -h, --help                    | boolean   | `false`           | Show help.                                                                    |
 | -v, --version                 | boolean   | `false`           | Show current version.                                                         |
-| --rootDir <sup>[*]</sup>      | string    | `./`              | Specifies the root directory of input files.                                  |
-| -o, --outDir <sup>[*]</sup>   | string    | `./`              | Redirect output structure to the directory.                                   |
-| --pattern <sup>[*]</sup>      | string    | `**/*.css`        | Files glob pattern.                                                           |
+| --rootDir                     | string    | `./`              | Specifies the root directory of input files.                                  |
+| -o, --outDir                  | string    | `./`              | Redirect output structure to the directory.                                   |
+| --pattern                     | string    | `**/*.css`        | Files glob pattern.                                                           |
 | -w, --watch                   | boolean   | `false`           | Watch for changes of input files.                                             |
 | --prefix                      | string    |                   | Prefix added to ouput file name.                                              |
 | --suffix                      | string    |                   | Suffix added to output file name.                                             |
@@ -34,8 +34,6 @@ $ npm install css-to-ts
 | --removeSource                | boolean   | `false`           | Remove all source files specified by glob pattern.                            |
 | --header                      | string    |                   | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`   | Specifies current working directory.                                          |
-
-<sup>[*]</sup> - argument required.
 
 ## Example
 
@@ -80,9 +78,9 @@ import { ConvertCssToTs } from "css-to-ts";
 | `variableName`    | string | *        | Name of variable to be exported in TypeScript file.       |
 | `headerComment`   | string |          | Comment placed in the top of exported TypeScript file.    |
 
-### `CssToTsConverter`
+### `new CssToTsConverter(tsDir, tsFileName, cssDir, cssFileName, varName, header, removeSource)`
 
-Compiles css file to importable TypeScript file.
+Compiles css files to importable TypeScript files.
 
 Usage:
 ```ts
@@ -105,15 +103,15 @@ try {
 }
 ```
 
-| Constructor argument  | Type      | Default       | Description                                               |
-|-----------------------|-----------|---------------|-----------------------------------------------------------|
-| `tsDir`               | string    | `undefined`   | Directory of TypeScript file.                             |
-| `tsFileName`          | string    | `undefined`   | File name of TypeScript file.                             |
-| `cssDir`              | string    | `undefined`   | Directory of css file.                                    |
-| `cssFileName`         | string    | `undefined`   | File name of css file.                                    |
-| `varName`             | string    | `undefined`   | Name of variable to be exported in TypeScript file.       |
-| `header`              | string    | `undefined`   | Comment placed in the top of exported TypeScript file.    |
-| `removeSource`        | boolean   | `false`       | Should css file be deleted after TS file emmitted.        |
+| Constructor argument  | Type      | Required  | Description                                                   |
+|-----------------------|-----------|-----------|---------------------------------------------------------------|
+| `tsDir`               | string    | *         | Directory of TypeScript file.                                 |
+| `tsFileName`          | string    | *         | File name of TypeScript file.                                 |
+| `cssDir`              | string    | *         | Directory of css file.                                        |
+| `cssFileName`         | string    | *         | File name of css file.                                        |
+| `varName`             | string    | *         | Name of variable to be exported in TypeScript file.           |
+| `header`              | string    |           | Comment placed in the top of exported TypeScript file.        |
+| `removeSource`        | boolean   |           | Should css file be deleted after TypeScript file emmitted.    |
 
 
 

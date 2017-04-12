@@ -9,3 +9,7 @@ exports.CLIDefaults = {
     rootDir: "./",
     outDir: "./"
 };
+function IsNodeError(error) {
+    return (error != null && error.errno != null);
+}
+exports.IsNodeError = IsNodeError;

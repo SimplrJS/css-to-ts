@@ -11,3 +11,7 @@ export var CLIDefaults: Options = {
     rootDir: "./",
     outDir: "./"
 };
+
+export function IsNodeError(error: any): error is NodeJS.ErrnoException {
+    return (error != null && error.errno != null);
+}
