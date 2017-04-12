@@ -41,7 +41,7 @@ $ npm install css-to-ts
 $  css-to-ts --rootDir "./src" --outDir "./dist" --pattern "*.css" --header "File generated with css-to-ts"
 ```
 
-Input file `./src/orange.css`
+Input file `./src/orange.css`:
 ```css
 .orange {
     color: orange;
@@ -49,7 +49,7 @@ Input file `./src/orange.css`
 }
 ```
 
-Generated `./dist/orange.ts`
+Generated `./dist/orange.ts`:
 ```ts
 // File generated with css-to-ts
 export var Orange = `.orange {
