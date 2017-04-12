@@ -3,7 +3,12 @@ import * as path from "path";
 import { watch } from "chokidar";
 import { Options } from "./contracts";
 import { CssToTsConverter } from "./css-to-ts-converter";
-import { EmitError, CLIDefaults, IsNodeError } from "./helpers";
+import {
+    EmitError,
+    CLIDefaults,
+    IsNodeError,
+    DEFAULT_IGNORED_GLOB
+} from "./helpers";
 
 export class CLIHandler {
     constructor(private options: Options) {
@@ -36,14 +41,18 @@ export class CLIHandler {
 
             // this.options.cwd resolved in `private async run()`
             let cwd = path.join(this.options.cwd!, this.options.rootDir);
-
-            new Glob(pattern, { cwd: cwd }, (error, filesArray) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(filesArray);
-            });
+            new Glob(pattern,
+                {
+                    ignore: DEFAULT_IGNORED_GLOB,
+                    cwd: cwd,
+                },
+                (error, filesArray) => {
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(filesArray);
+                });
         });
     }
 
@@ -53,7 +62,8 @@ export class CLIHandler {
         // this.options.cwd resolved in `private async run()`
         let cwd = path.join(this.options.cwd!, this.options.rootDir);
         let watcher = watch(this.options.pattern, {
-            cwd: cwd
+            cwd: cwd,
+            ignored: DEFAULT_IGNORED_GLOB
         });
 
         watcher.on("change", this.onWatchChange);

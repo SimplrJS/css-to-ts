@@ -1,5 +1,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CLI_ERROR_PREFIX = "CssToTs";
+exports.DEFAULT_IGNORED_GLOB = "node_modules/**/*.css";
 function EmitError(message) {
     console.log(`${exports.CLI_ERROR_PREFIX}: ${message}`);
 }

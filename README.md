@@ -4,8 +4,10 @@ Compiles css files to importable TypeScript files.
 
 ## Instalation
 ```sh
-$ npm install css-to-ts
+$ npm install css-to-ts -g
 ```
+
+Global installation is not necessary. You can install this package with ```sh $ npm install css-to-ts``` and use it in [`npm-scripts`](https://docs.npmjs.com/misc/scripts).
 
 ## Features
 - Takes css files and output TypeScript files with exported string containing content of your css file.

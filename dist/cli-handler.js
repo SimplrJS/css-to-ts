@@ -54,7 +54,10 @@ class CLIHandler {
             return new Promise((resolve, reject) => {
                 // this.options.cwd resolved in `private async run()`
                 let cwd = path.join(this.options.cwd, this.options.rootDir);
-                new glob_1.Glob(pattern, { cwd: cwd }, (error, filesArray) => {
+                new glob_1.Glob(pattern, {
+                    ignore: helpers_1.DEFAULT_IGNORED_GLOB,
+                    cwd: cwd,
+                }, (error, filesArray) => {
                     if (error) {
                         reject(error);
                         return;
@@ -69,7 +72,8 @@ class CLIHandler {
         // this.options.cwd resolved in `private async run()`
         let cwd = path.join(this.options.cwd, this.options.rootDir);
         let watcher = chokidar_1.watch(this.options.pattern, {
-            cwd: cwd
+            cwd: cwd,
+            ignored: helpers_1.DEFAULT_IGNORED_GLOB
         });
         watcher.on("change", this.onWatchChange);
         watcher.on("error", this.onWatchError);
