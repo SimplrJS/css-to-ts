@@ -29,6 +29,7 @@ class CLIHandler {
         this.options.outDir = this.options.outDir || helpers_1.CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || helpers_1.CLIDefaults.pattern;
         this.options.delimitter = this.options.delimitter || helpers_1.CLIDefaults.delimitter;
+        this.options.ignore = this.options.ignore || helpers_1.CLIDefaults.ignore;
         if (this.options.watch) {
             this.watchCss();
         }
@@ -55,8 +56,8 @@ class CLIHandler {
                 // this.options.cwd resolved in `private async run()`
                 let cwd = path.join(this.options.cwd, this.options.rootDir);
                 new glob_1.Glob(pattern, {
-                    ignore: helpers_1.DEFAULT_IGNORED_GLOB,
-                    cwd: cwd,
+                    ignore: this.options.ignore,
+                    cwd: cwd
                 }, (error, filesArray) => {
                     if (error) {
                         reject(error);
@@ -72,8 +73,8 @@ class CLIHandler {
         // this.options.cwd resolved in `private async run()`
         let cwd = path.join(this.options.cwd, this.options.rootDir);
         let watcher = chokidar_1.watch(this.options.pattern, {
-            cwd: cwd,
-            ignored: helpers_1.DEFAULT_IGNORED_GLOB
+            ignored: this.options.ignore,
+            cwd: cwd
         });
         watcher.on("change", this.onWatchChange);
         watcher.on("error", this.onWatchError);

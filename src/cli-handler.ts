@@ -6,8 +6,7 @@ import { CssToTsConverter } from "./css-to-ts-converter";
 import {
     EmitError,
     CLIDefaults,
-    IsNodeError,
-    DEFAULT_IGNORED_GLOB
+    IsNodeError
 } from "./helpers";
 
 export class CLIHandler {
@@ -17,6 +16,7 @@ export class CLIHandler {
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
         this.options.delimitter = this.options.delimitter || CLIDefaults.delimitter;
+        this.options.ignore = this.options.ignore || CLIDefaults.ignore;
 
         if (this.options.watch) {
             this.watchCss();
@@ -43,8 +43,8 @@ export class CLIHandler {
             let cwd = path.join(this.options.cwd!, this.options.rootDir);
             new Glob(pattern,
                 {
-                    ignore: DEFAULT_IGNORED_GLOB,
-                    cwd: cwd,
+                    ignore: this.options.ignore,
+                    cwd: cwd
                 },
                 (error, filesArray) => {
                     if (error) {
@@ -62,8 +62,8 @@ export class CLIHandler {
         // this.options.cwd resolved in `private async run()`
         let cwd = path.join(this.options.cwd!, this.options.rootDir);
         let watcher = watch(this.options.pattern, {
-            cwd: cwd,
-            ignored: DEFAULT_IGNORED_GLOB
+            ignored: this.options.ignore,
+            cwd: cwd
         });
 
         watcher.on("change", this.onWatchChange);

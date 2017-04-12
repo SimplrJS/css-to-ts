@@ -50,8 +50,12 @@ export var Arguments = yargs
         describe: "Specifies current working diretory.",
         type: "string"
     })
-    .options("delimitter", {
+    .option("delimitter", {
         describe: "Specifies delimitter for prefix and suffix.",
         type: "string"
+    })
+    .option("ignore", {
+        describe: "Specifies array of glob patterns to exclude matches.",
+        type: "array"
     })
     .argv as Options;
