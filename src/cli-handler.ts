@@ -16,7 +16,7 @@ export class CLIHandler {
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
         this.options.delimitter = this.options.delimitter || CLIDefaults.delimitter;
-        this.options.ignore = this.options.ignore || CLIDefaults.ignore;
+        this.options.exclude = this.options.exclude || CLIDefaults.exclude;
 
         if (this.options.watch) {
             this.watchCss();
@@ -43,7 +43,7 @@ export class CLIHandler {
             let cwd = path.join(this.options.cwd!, this.options.rootDir);
             new Glob(pattern,
                 {
-                    ignore: this.options.ignore,
+                    ignore: this.options.exclude,
                     cwd: cwd
                 },
                 (error, filesArray) => {
@@ -62,7 +62,7 @@ export class CLIHandler {
         // this.options.cwd resolved in `private async run()`
         let cwd = path.join(this.options.cwd!, this.options.rootDir);
         let watcher = watch(this.options.pattern, {
-            ignored: this.options.ignore,
+            ignored: this.options.exclude,
             cwd: cwd
         });
 

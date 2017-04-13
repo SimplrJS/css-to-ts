@@ -11,7 +11,7 @@ export var CLIDefaults: Options = {
     rootDir: "./",
     outDir: "./",
     delimitter: "-",
-    ignore: ["**/node_modules/**"]
+    exclude: ["**/node_modules/**"]
 };
 
 export function IsNodeError(error: any): error is NodeJS.ErrnoException {
