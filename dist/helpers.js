@@ -9,7 +9,7 @@ exports.CLIDefaults = {
     rootDir: "./",
     outDir: "./",
     delimitter: "-",
-    ignore: ["**/node_modules/**"]
+    exclude: ["**/node_modules/**"]
 };
 function IsNodeError(error) {
     return (error != null && error.errno != null);

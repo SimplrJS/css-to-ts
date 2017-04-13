@@ -52,8 +52,8 @@ exports.Arguments = yargs
     describe: "Specifies delimitter for prefix and suffix.",
     type: "string"
 })
-    .option("ignore", {
-    describe: "Specifies array of glob patterns to exclude matches.",
+    .option("exclude", {
+    describe: "Specifies an array of globs to exclude.",
     type: "array"
 })
     .argv;
