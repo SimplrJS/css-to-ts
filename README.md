@@ -40,7 +40,7 @@ $ css-to-ts -h
 | --removeSource                | boolean   | `false`                   | Remove all source files specified by glob pattern.                            |
 | --header                      | string    |                           | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`           | Specifies current working directory.                                          |
-| --ignore                      | array     | `["**/node_modules/**"]`  | Array of globs to be ignored.                                                 |
+| --exclude                     | array     | `["**/node_modules/**"]`  | Specifies an array of globs to exclude.                                       |
 
 ## Example
 
