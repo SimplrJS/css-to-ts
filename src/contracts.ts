@@ -1,4 +1,4 @@
-export interface Options extends CSSToTsOptions {
+export interface Options extends CssToTsOptions {
     removeSource?: boolean;
     pattern: string;
     watch?: boolean;
@@ -7,7 +7,7 @@ export interface Options extends CSSToTsOptions {
     ignore?: Array<string>;
 }
 
-export interface CSSToTsOptions {
+export interface CssToTsOptions {
     rootDir: string;
     outDir: string;
     suffix?: string;
