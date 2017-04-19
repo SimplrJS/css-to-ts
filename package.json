@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/SimplrJS/css-to-ts/issues"
   },
-  "homepage": "https://github.com/SimplrJS/css-to-ts#readme",
+  "homepage": "https://github.com/SimplrJS/css-to-ts",
   "devDependencies": {
     "tslint": "^5.0.0",
     "typescript": "^2.2.2"
