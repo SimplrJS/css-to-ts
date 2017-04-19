@@ -1,14 +1,15 @@
 {
   "name": "css-to-ts",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.9",
   "description": "css-to-ts takes css file and outputs TypeScript file with an exported string containing content of your css file.",
-  "main": "dist/css-to-ts.js",
+  "main": "dist/index.js",
+  "types": "@types/index.d.ts",
   "scripts": {
-    "build": "webpack",
+    "build": "tsc -p .",
     "tslint": "tslint --project . --config ./tslint.json",
-    "watch": "webpack --watch",
+    "watch": "tsc -w",
     "test": "tsc -p . --noEmit && npm run tslint",
-    "release": "npm run build && npm run uglifyjs"
+    "release": "npm run build && npm run tslint"
   },
   "repository": {
     "type": "git",
@@ -24,23 +25,36 @@
     "Typescript",
     "css-to-ts"
   ],
-  "author": "Deividas Bakanas <deividas@quatrodev.com> (https://github.com/DeividasBakanas)",
+  "files": [
+    "dist",
+    "@types",
+    "*.md",
+    "LICENSE"
+  ],
+  "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SimplrJS/css-to-ts/issues"
   },
-  "homepage": "https://github.com/SimplrJS/css-to-ts#readme",
+  "homepage": "https://github.com/SimplrJS/css-to-ts",
   "devDependencies": {
-    "@types/glob": "^5.0.30",
-    "@types/yargs": "^6.6.0",
-    "ts-loader": "^2.0.3",
     "tslint": "^5.0.0",
-    "typescript": "^2.2.2",
-    "uglify-js": "^2.8.21",
-    "webpack": "^2.3.3"
+    "typescript": "^2.2.2"
   },
   "dependencies": {
+    "@types/chokidar": "^1.6.0",
+    "@types/glob": "^5.0.30",
+    "@types/mkdirp": "^0.3.29",
+    "@types/yargs": "^6.6.0",
+    "@types/mz": "0.0.30",
+    "chokidar": "^1.6.1",
     "glob": "^7.1.1",
+    "mkdirp": "^0.5.1",
+    "mz": "^2.6.0",
     "yargs": "^7.0.2"
+  },
+  "engine": "node >= 5.0.0",
+  "bin": {
+    "css-to-ts": "./dist/cli.js"
   }
 }
