@@ -29,7 +29,6 @@
     "dist",
     "@types",
     "*.md",
-    "package.json",
     "LICENSE"
   ],
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
