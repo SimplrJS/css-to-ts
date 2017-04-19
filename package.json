@@ -32,7 +32,7 @@
     "package.json",
     "LICENSE"
   ],
-  "author": "Deividas Bakanas <deividas@quatrodev.com> (https://github.com/DeividasBakanas)",
+  "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SimplrJS/css-to-ts/issues"
