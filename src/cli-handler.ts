@@ -86,14 +86,14 @@ export class CLIHandler {
     }
 
     private async convertFile(filePath: string) {
-        let filePathData = path.parse(filePath);
+        const filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
-        let cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
-        let tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
+        const cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
+        const tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
-        let varName = this.constructVarName(filePathData.name);
-        let tsFileName = this.constructFileName(filePathData.name, ".ts");
+        const varName = this.resolveVarName(filePathData.name);
+        const tsFileName = this.constructFileName(filePathData.name, ".ts");
 
         const converter = new CssToTsConverter(
             tsDir,
@@ -129,9 +129,20 @@ export class CLIHandler {
         }
     }
 
-    private constructVarName(fileName: string) {
-        let newName = this.constructFileName(fileName);
-        return this.snakeCaseToCamelCase(newName);
+    private resolveVarName(fileName: string) {
+        if (this.options.varName && typeof this.options.varName === "string") {
+            return this.options.varName;
+        }
+
+        const newFileName = this.constructFileName(fileName);
+        const variableName = this.snakeCaseToCamelCase(newFileName);
+
+        if (variableName.length === 0) {
+            throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
+                "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
+        }
+
+        return variableName;
     }
 
     private constructFileName(fileName: string, extension?: string) {
@@ -156,9 +167,11 @@ export class CLIHandler {
     }
 
     private snakeCaseToCamelCase(fileName: string) {
-        let regex = /(\w*)(\-*)/g;
-        return fileName.replace(regex, (match: string, word: string, delimitter: string) => {
+        const regex = /(\w*)(\-*)/g;
+        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimitter: string) => {
             return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
         });
+
+        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }

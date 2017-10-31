@@ -84,12 +84,12 @@ class CLIHandler {
     }
     convertFile(filePath) {
         return __awaiter(this, void 0, void 0, function* () {
-            let filePathData = path.parse(filePath);
+            const filePathData = path.parse(filePath);
             // this.options.cwd resolved in `private async run()`
-            let cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
-            let tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
-            let varName = this.constructVarName(filePathData.name);
-            let tsFileName = this.constructFileName(filePathData.name, ".ts");
+            const cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
+            const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
+            const varName = this.resolveVarName(filePathData.name);
+            const tsFileName = this.constructFileName(filePathData.name, ".ts");
             const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource);
             try {
                 yield converter.Convert();
@@ -115,9 +115,17 @@ class CLIHandler {
             }
         });
     }
-    constructVarName(fileName) {
-        let newName = this.constructFileName(fileName);
-        return this.snakeCaseToCamelCase(newName);
+    resolveVarName(fileName) {
+        if (this.options.varName && typeof this.options.varName === "string") {
+            return this.options.varName;
+        }
+        const newFileName = this.constructFileName(fileName);
+        const variableName = this.snakeCaseToCamelCase(newFileName);
+        if (variableName.length === 0) {
+            throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
+                "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
+        }
+        return variableName;
     }
     constructFileName(fileName, extension) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimitter) {
@@ -135,10 +143,11 @@ class CLIHandler {
         return newName;
     }
     snakeCaseToCamelCase(fileName) {
-        let regex = /(\w*)(\-*)/g;
-        return fileName.replace(regex, (match, word, delimitter) => {
+        const regex = /(\w*)(\-*)/g;
+        const camelCasedFileName = fileName.replace(regex, (match, word, delimitter) => {
             return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
         });
+        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }
 exports.CLIHandler = CLIHandler;

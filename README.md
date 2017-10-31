@@ -8,8 +8,8 @@ $ npm install css-to-ts -g
 ```
 
 Global installation is not necessary. You can install this package with 
-```
-sh $ npm install css-to-ts
+```sh 
+$ npm install css-to-ts
 ``` 
 and use it with [`npm-scripts`](https://docs.npmjs.com/misc/scripts).
 
@@ -41,6 +41,7 @@ $ css-to-ts -h
 | --header                      | string    |                           | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`           | Specifies current working directory.                                          |
 | --exclude                     | array     | `["**/node_modules/**"]`  | Specifies an array of globs to exclude.                                       |
+| --varName                     | string    |                           | Specifies name of variable to be exported in TypeScript file.                 |
 
 ## Example
 
