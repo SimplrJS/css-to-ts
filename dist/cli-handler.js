@@ -88,7 +88,7 @@ class CLIHandler {
             // this.options.cwd resolved in `private async run()`
             const cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
             const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
-            const varName = this.constructVarName(filePathData.name);
+            const varName = this.resolveVarName(filePathData.name);
             const tsFileName = this.constructFileName(filePathData.name, ".ts");
             const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource);
             try {
@@ -115,8 +115,8 @@ class CLIHandler {
             }
         });
     }
-    constructVarName(fileName) {
-        if (this.options.varName) {
+    resolveVarName(fileName) {
+        if (this.options.varName && typeof this.options.varName === "string") {
             return this.options.varName;
         }
         const newFileName = this.constructFileName(fileName);

@@ -92,7 +92,7 @@ export class CLIHandler {
         const cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
         const tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
-        const varName = this.constructVarName(filePathData.name);
+        const varName = this.resolveVarName(filePathData.name);
         const tsFileName = this.constructFileName(filePathData.name, ".ts");
 
         const converter = new CssToTsConverter(
@@ -129,8 +129,8 @@ export class CLIHandler {
         }
     }
 
-    private constructVarName(fileName: string) {
-        if (this.options.varName) {
+    private resolveVarName(fileName: string) {
+        if (this.options.varName && typeof this.options.varName === "string") {
             return this.options.varName;
         }
 
