@@ -56,4 +56,8 @@ exports.Arguments = yargs
     describe: "Specifies an array of globs to exclude.",
     type: "array"
 })
+    .option("varName", {
+    describe: "Specifies name of variable to be exported in TypeScript file.",
+    type: "string"
+})
     .argv;

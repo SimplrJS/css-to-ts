@@ -41,6 +41,7 @@ $ css-to-ts -h
 | --header                      | string    |                           | Specifies header comment in generated TS file.                                |
 | --cwd                         | string    | `process.cwd()`           | Specifies current working directory.                                          |
 | --exclude                     | array     | `["**/node_modules/**"]`  | Specifies an array of globs to exclude.                                       |
+| --varName                     | string    |                           | Specifies name of variable to be exported in TypeScript file.                 |
 
 ## Example
 

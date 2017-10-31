@@ -13,4 +13,5 @@ export interface CssToTsOptions {
     suffix?: string;
     prefix?: string;
     header?: string;
+    varName?: string;
 }
