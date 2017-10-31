@@ -39,7 +39,7 @@
   "homepage": "https://github.com/SimplrJS/css-to-ts",
   "devDependencies": {
     "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "typescript": "^2.6.1"
   },
   "dependencies": {
     "@types/chokidar": "^1.7.3",
