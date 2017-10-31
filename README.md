@@ -8,8 +8,8 @@ $ npm install css-to-ts -g
 ```
 
 Global installation is not necessary. You can install this package with 
-```
-sh $ npm install css-to-ts
+```sh 
+$ npm install css-to-ts
 ``` 
 and use it with [`npm-scripts`](https://docs.npmjs.com/misc/scripts).
 
