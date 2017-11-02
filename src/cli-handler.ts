@@ -6,8 +6,10 @@ import { CssToTsConverter } from "./css-to-ts-converter";
 import {
     EmitError,
     CLIDefaults,
-    IsNodeError
+    IsNodeError,
+    SnakeCaseToCamelCase
 } from "./helpers";
+import { IsVarTypeValid, IsVarNameValid } from "./validators";
 
 export class CLIHandler {
     constructor(private options: Options) {
@@ -71,6 +73,11 @@ export class CLIHandler {
     }
 
     private async convertFile(filePath: string): Promise<void> {
+        if (!IsVarTypeValid(this.options.varType)) {
+            throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
+                `Valid values: \`var\`, \'let\', \`const\`.`);
+        }
+
         const filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
@@ -87,7 +94,8 @@ export class CLIHandler {
             filePathData.base,
             varName,
             this.options.header,
-            this.options.removeSource
+            this.options.removeSource,
+            this.options.varType
         );
 
         try {
@@ -120,19 +128,14 @@ export class CLIHandler {
         }
 
         const newFileName = this.constructFileName(fileName);
-        const variableName = this.snakeCaseToCamelCase(newFileName);
+        const variableName = SnakeCaseToCamelCase(newFileName);
 
-        if (!this.isVarNameValid(variableName)) {
+        if (!IsVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
 
         return variableName;
-    }
-
-    private isVarNameValid(varName: string): boolean {
-        const startsWithNumberRegex = new RegExp("^[0-9]", "ig");
-        return (varName.length > 0 && !startsWithNumberRegex.test(varName));
     }
 
     private constructFileName(fileName: string, extension?: string): string {
@@ -154,13 +157,5 @@ export class CLIHandler {
 
         newName += extension || "";
         return newName;
-    }
-
-    private snakeCaseToCamelCase(fileName: string): string {
-        const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimiter: string) =>
-            word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
-
-        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }

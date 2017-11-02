@@ -9,7 +9,5 @@ export declare class CLIHandler {
     private emitWatchMessage();
     private convertFile(filePath);
     private resolveVarName(fileName);
-    private isVarNameValid(varName);
     private constructFileName(fileName, extension?);
-    private snakeCaseToCamelCase(fileName);
 }

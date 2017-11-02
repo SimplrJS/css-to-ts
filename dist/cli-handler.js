@@ -12,6 +12,7 @@ const path = require("path");
 const chokidar_1 = require("chokidar");
 const css_to_ts_converter_1 = require("./css-to-ts-converter");
 const helpers_1 = require("./helpers");
+const validators_1 = require("./validators");
 class CLIHandler {
     constructor(options) {
         this.options = options;
@@ -70,13 +71,18 @@ class CLIHandler {
     }
     convertFile(filePath) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!validators_1.IsVarTypeValid(this.options.varType)) {
+                throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
+                    `Valid values: \`var\`, \'let\', \`const\`.`);
+            }
             const filePathData = path.parse(filePath);
             // this.options.cwd resolved in `private async run()`
             const cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
             const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
             const varName = this.resolveVarName(filePathData.name);
             const tsFileName = this.constructFileName(filePathData.name, ".ts");
-            const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource);
+            console.log(`"${this.options.varType}"`);
+            const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource, this.options.varType);
             try {
                 yield converter.Convert();
             }
@@ -106,16 +112,12 @@ class CLIHandler {
             return this.options.varName;
         }
         const newFileName = this.constructFileName(fileName);
-        const variableName = this.snakeCaseToCamelCase(newFileName);
-        if (!this.isVarNameValid(variableName)) {
+        const variableName = helpers_1.SnakeCaseToCamelCase(newFileName);
+        if (!validators_1.IsVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
         return variableName;
-    }
-    isVarNameValid(varName) {
-        const startsWithNumberRegex = new RegExp("^[0-9]", "ig");
-        return (varName.length > 0 && !startsWithNumberRegex.test(varName));
     }
     constructFileName(fileName, extension) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimiter) {
@@ -131,11 +133,6 @@ class CLIHandler {
         }
         newName += extension || "";
         return newName;
-    }
-    snakeCaseToCamelCase(fileName) {
-        const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match, word, delimiter) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
-        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }
 exports.CLIHandler = CLIHandler;
