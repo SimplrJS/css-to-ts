@@ -1,15 +1,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const yargs = require("yargs");
+const path = require("path");
+const fs = require("fs-extra");
 function GetVersion() {
-    let packageJson = require("../package.json");
-    return packageJson.version || "";
+    const packageData = fs.readJSONSync(path.join(__dirname, "../package.json"));
+    return packageData.version || "Could not resolve version.";
 }
 exports.Arguments = yargs
     .help("h", "Show help")
     .alias("h", "help")
-    .version(() => {
-    return `CurrentVersion: ${GetVersion()}`;
-})
+    .version(() => `CurrentVersion: ${GetVersion()}`)
     .alias("v", "version")
     .option("rootDir", {
     describe: "Specifies the root directory of input file / files.",

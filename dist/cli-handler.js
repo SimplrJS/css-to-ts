@@ -40,7 +40,7 @@ class CLIHandler {
     handleGlob() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let filesArray = yield this.getFilesArray(this.options.pattern);
+                const filesArray = yield this.getFilesArray(this.options.pattern);
                 for (let i = 0; i < filesArray.length; i++) {
                     yield this.convertFile(filesArray[i]);
                 }
@@ -54,7 +54,7 @@ class CLIHandler {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 // this.options.cwd resolved in `private async run()`
-                let cwd = path.join(this.options.cwd, this.options.rootDir);
+                const cwd = path.join(this.options.cwd, this.options.rootDir);
                 new glob_1.Glob(pattern, {
                     ignore: this.options.exclude,
                     cwd: cwd
@@ -71,8 +71,8 @@ class CLIHandler {
     watchCss() {
         this.emitWatchMessage();
         // this.options.cwd resolved in `private async run()`
-        let cwd = path.join(this.options.cwd, this.options.rootDir);
-        let watcher = chokidar_1.watch(this.options.pattern, {
+        const cwd = path.join(this.options.cwd, this.options.rootDir);
+        const watcher = chokidar_1.watch(this.options.pattern, {
             ignored: this.options.exclude,
             cwd: cwd
         });
@@ -144,9 +144,7 @@ class CLIHandler {
     }
     snakeCaseToCamelCase(fileName) {
         const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match, word, delimiter) => {
-            return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-        });
+        const camelCasedFileName = fileName.replace(regex, (match, word, delimiter) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
         return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }

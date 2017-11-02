@@ -1,6 +1,5 @@
-import { fs } from "mz";
+import * as fs from "fs-extra";
 import * as path from "path";
-import * as mkdirp from "mkdirp";
 import { ConvertCssToTs } from "./css-to-ts";
 import { EmitError, IsNodeError } from "./helpers";
 
@@ -36,7 +35,7 @@ export class CssToTsConverter {
 
             switch (error.errno) {
                 case -4058:
-                    await this.makeDirRecursively(this.tsDir);
+                    await fs.mkdirp(this.tsDir);
                     break;
                 default: {
                     throw error;
@@ -51,17 +50,5 @@ export class CssToTsConverter {
         }
 
         console.log(`TS file ${tsPath} successfully emitted.`);
-    }
-
-    private async makeDirRecursively(dirPath: string): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            mkdirp(dirPath, (error, made) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(made);
-                }
-            });
-        });
     }
 }

@@ -1,10 +1,11 @@
 import * as yargs from "yargs";
-import { Options } from "./contracts";
+import * as path from "path";
+import * as fs from "fs-extra";
+import { Options, BasePackage } from "./contracts";
 
 function GetVersion(): string {
-    // tslint:disable-next-line:no-require-imports
-    const packageJson = require("../package.json");
-    return packageJson.version || "";
+    const packageData = fs.readJSONSync(path.join(__dirname, "../package.json")) as BasePackage;
+    return packageData.version || "Could not resolve version.";
 }
 
 export const Arguments = yargs
