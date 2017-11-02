@@ -15,7 +15,7 @@ export class CssToTsConverter {
         private removeSource?: boolean
     ) { }
 
-    public async Convert() {
+    public async Convert(): Promise<void> {
         const tsPath = path.join(this.tsDir, this.tsFileName);
         const cssPath = path.join(this.cssDir, this.cssFileName);
 
@@ -53,7 +53,7 @@ export class CssToTsConverter {
         console.log(`TS file ${tsPath} successfully emitted.`);
     }
 
-    private async makeDirRecursively(dirPath: string) {
+    private async makeDirRecursively(dirPath: string): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             mkdirp(dirPath, (error, made) => {
                 if (error) {

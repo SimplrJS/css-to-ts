@@ -25,9 +25,9 @@ export class CLIHandler {
         }
     }
 
-    private async handleGlob() {
+    private async handleGlob(): Promise<void> {
         try {
-            let filesArray = await this.getFilesArray(this.options.pattern);
+            const filesArray = await this.getFilesArray(this.options.pattern);
             for (let i = 0; i < filesArray.length; i++) {
                 await this.convertFile(filesArray[i]);
             }
@@ -36,11 +36,11 @@ export class CLIHandler {
         }
     }
 
-    private async getFilesArray(pattern: string) {
-        return new Promise<Array<string>>((resolve, reject) => {
+    private async getFilesArray(pattern: string): Promise<string[]> {
+        return new Promise<string[]>((resolve, reject) => {
 
             // this.options.cwd resolved in `private async run()`
-            let cwd = path.join(this.options.cwd!, this.options.rootDir);
+            const cwd = path.join(this.options.cwd!, this.options.rootDir);
             new Glob(pattern,
                 {
                     ignore: this.options.exclude,
@@ -56,12 +56,12 @@ export class CLIHandler {
         });
     }
 
-    private watchCss() {
+    private watchCss(): void {
         this.emitWatchMessage();
 
         // this.options.cwd resolved in `private async run()`
-        let cwd = path.join(this.options.cwd!, this.options.rootDir);
-        let watcher = watch(this.options.pattern, {
+        const cwd = path.join(this.options.cwd!, this.options.rootDir);
+        const watcher = watch(this.options.pattern, {
             ignored: this.options.exclude,
             cwd: cwd
         });
@@ -81,11 +81,11 @@ export class CLIHandler {
         this.emitWatchMessage();
     }
 
-    private emitWatchMessage() {
+    private emitWatchMessage(): void {
         console.log(`Watching for ${this.options.pattern}`);
     }
 
-    private async convertFile(filePath: string) {
+    private async convertFile(filePath: string): Promise<void> {
         const filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
@@ -129,7 +129,7 @@ export class CLIHandler {
         }
     }
 
-    private resolveVarName(fileName: string) {
+    private resolveVarName(fileName: string): string {
         if (this.options.varName && typeof this.options.varName === "string") {
             return this.options.varName;
         }
@@ -145,7 +145,7 @@ export class CLIHandler {
         return variableName;
     }
 
-    private constructFileName(fileName: string, extension?: string) {
+    private constructFileName(fileName: string, extension?: string): string {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimiter) {
             throw new Error("You MUST define a delimiter when using prefix or suffix. -h for more information.");
         }
@@ -166,11 +166,10 @@ export class CLIHandler {
         return newName;
     }
 
-    private snakeCaseToCamelCase(fileName: string) {
+    private snakeCaseToCamelCase(fileName: string): string {
         const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimiter: string) => {
-            return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-        });
+        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimiter: string) =>
+            word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
 
         return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
