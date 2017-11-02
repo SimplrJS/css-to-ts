@@ -47,11 +47,11 @@ export var Arguments = yargs
         type: "string"
     })
     .option("cwd", {
-        describe: "Specifies current working diretory.",
+        describe: "Specifies current working directory.",
         type: "string"
     })
-    .option("delimitter", {
-        describe: "Specifies delimitter for prefix and suffix.",
+    .option("delimiter", {
+        describe: "Specifies delimiter for prefix and suffix.",
         type: "string"
     })
     .option("exclude", {

@@ -10,7 +10,7 @@ export var CLIDefaults: Options = {
     pattern: "**/*.css",
     rootDir: "./",
     outDir: "./",
-    delimitter: "-",
+    delimiter: "-",
     exclude: ["**/node_modules/**"]
 };
 

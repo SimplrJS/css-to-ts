@@ -15,7 +15,7 @@ export class CLIHandler {
         this.options.rootDir = this.options.rootDir || CLIDefaults.rootDir;
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
-        this.options.delimitter = this.options.delimitter || CLIDefaults.delimitter;
+        this.options.delimiter = this.options.delimiter || CLIDefaults.delimiter;
         this.options.exclude = this.options.exclude || CLIDefaults.exclude;
 
         if (this.options.watch) {
@@ -146,20 +146,20 @@ export class CLIHandler {
     }
 
     private constructFileName(fileName: string, extension?: string) {
-        if ((this.options.prefix || this.options.suffix) && !this.options.delimitter) {
-            throw new Error("You MUST define a delimitter when using prefix or suffix. -h for more information.");
+        if ((this.options.prefix || this.options.suffix) && !this.options.delimiter) {
+            throw new Error("You MUST define a delimiter when using prefix or suffix. -h for more information.");
         }
 
         let newName = "";
 
         if (this.options.prefix) {
-            newName += this.options.prefix + this.options.delimitter;
+            newName += this.options.prefix + this.options.delimiter;
         }
 
         newName += fileName;
 
         if (this.options.suffix) {
-            newName += this.options.delimitter + this.options.suffix;
+            newName += this.options.delimiter + this.options.suffix;
         }
 
         newName += extension || "";
@@ -168,7 +168,7 @@ export class CLIHandler {
 
     private snakeCaseToCamelCase(fileName: string) {
         const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimitter: string) => {
+        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimiter: string) => {
             return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
         });
 

@@ -3,7 +3,7 @@ export interface Options extends CssToTsOptions {
     pattern: string;
     watch?: boolean;
     cwd?: string;
-    delimitter?: string;
+    delimiter?: string;
     exclude?: Array<string>;
 }
 
