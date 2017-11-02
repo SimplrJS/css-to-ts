@@ -1,13 +1,19 @@
 import { EOL } from "os";
+import { VarType } from "./contracts";
 
-export function ConvertCssToTs(stringifiedCss: string, variableName: string, headerComment?: string): string {
+export function ConvertCssToTs(
+    stringifiedCss: string,
+    variableName: string,
+    headerComment?: string,
+    varType: VarType = "var"
+): string {
     let tsContent = "";
 
     if (headerComment) {
         tsContent += `// ${headerComment}${EOL}`;
     }
 
-    tsContent += `export var ${variableName} = \`${stringifiedCss}\`;${EOL}`;
+    tsContent += `export ${varType} ${variableName} = \`${stringifiedCss}\`;${EOL}`;
 
     return tsContent;
 }

@@ -13,6 +13,7 @@ export interface CssToTsOptions {
     prefix?: string;
     header?: string;
     varName?: string | boolean;
+    varType?: string | boolean;
 }
 export interface BasePackage {
     name: string;
@@ -22,3 +23,4 @@ export interface BasePackage {
     author?: string;
     license?: string;
 }
+export declare type VarType = "var" | "let" | "const";

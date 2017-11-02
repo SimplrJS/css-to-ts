@@ -12,7 +12,7 @@ const path = require("path");
 const css_to_ts_1 = require("./css-to-ts");
 const helpers_1 = require("./helpers");
 class CssToTsConverter {
-    constructor(tsDir, tsFileName, cssDir, cssFileName, varName, header, removeSource) {
+    constructor(tsDir, tsFileName, cssDir, cssFileName, varName, header, removeSource, varType) {
         this.tsDir = tsDir;
         this.tsFileName = tsFileName;
         this.cssDir = cssDir;
@@ -20,6 +20,7 @@ class CssToTsConverter {
         this.varName = varName;
         this.header = header;
         this.removeSource = removeSource;
+        this.varType = varType;
     }
     Convert() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +28,7 @@ class CssToTsConverter {
             const cssPath = path.join(this.cssDir, this.cssFileName);
             console.log(`Reading css from ${cssPath}.`);
             const stringifiedCss = yield fs.readFile(cssPath, "utf-8");
-            const tsContent = css_to_ts_1.ConvertCssToTs(stringifiedCss, this.varName, this.header);
+            const tsContent = css_to_ts_1.ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
             try {
                 const dirStats = yield fs.stat(this.tsDir);
                 if (!dirStats.isDirectory()) {

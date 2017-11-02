@@ -2,6 +2,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import { ConvertCssToTs } from "./css-to-ts";
 import { EmitError, IsNodeError } from "./helpers";
+import { VarType } from "./contracts";
 
 export class CssToTsConverter {
     constructor(
@@ -11,7 +12,8 @@ export class CssToTsConverter {
         private cssFileName: string,
         private varName: string,
         private header?: string,
-        private removeSource?: boolean
+        private removeSource?: boolean,
+        private varType?: VarType
     ) { }
 
     public async Convert(): Promise<void> {
@@ -20,7 +22,7 @@ export class CssToTsConverter {
 
         console.log(`Reading css from ${cssPath}.`);
         const stringifiedCss = await fs.readFile(cssPath, "utf-8");
-        const tsContent = ConvertCssToTs(stringifiedCss, this.varName, this.header);
+        const tsContent = ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
 
         try {
             const dirStats = await fs.stat(this.tsDir);
