@@ -1,17 +1,16 @@
 import * as yargs from "yargs";
 import { Options } from "./contracts";
 
-function GetVersion() {
-    let packageJson = require("../package.json");
+function GetVersion(): string {
+    // tslint:disable-next-line:no-require-imports
+    const packageJson = require("../package.json");
     return packageJson.version || "";
 }
 
-export var Arguments = yargs
+export const Arguments = yargs
     .help("h", "Show help")
     .alias("h", "help")
-    .version(() => {
-        return `CurrentVersion: ${GetVersion()}`;
-    })
+    .version(() => `CurrentVersion: ${GetVersion()}`)
     .alias("v", "version")
     .option("rootDir", {
         describe: "Specifies the root directory of input file / files.",

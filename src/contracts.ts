@@ -4,7 +4,7 @@ export interface Options extends CssToTsOptions {
     watch?: boolean;
     cwd?: string;
     delimiter?: string;
-    exclude?: Array<string>;
+    exclude?: string[];
 }
 
 export interface CssToTsOptions {
