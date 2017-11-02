@@ -7,9 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mz_1 = require("mz");
+const fs = require("fs-extra");
 const path = require("path");
-const mkdirp = require("mkdirp");
 const css_to_ts_1 = require("./css-to-ts");
 const helpers_1 = require("./helpers");
 class CssToTsConverter {
@@ -27,10 +26,10 @@ class CssToTsConverter {
             const tsPath = path.join(this.tsDir, this.tsFileName);
             const cssPath = path.join(this.cssDir, this.cssFileName);
             console.log(`Reading css from ${cssPath}.`);
-            const stringifiedCss = yield mz_1.fs.readFile(cssPath, "utf-8");
+            const stringifiedCss = yield fs.readFile(cssPath, "utf-8");
             const tsContent = css_to_ts_1.ConvertCssToTs(stringifiedCss, this.varName, this.header);
             try {
-                const dirStats = yield mz_1.fs.stat(this.tsDir);
+                const dirStats = yield fs.stat(this.tsDir);
                 if (!dirStats.isDirectory()) {
                     helpers_1.EmitError(`Output directory ${this.tsDir} is not a directory.`);
                     return;
@@ -42,32 +41,18 @@ class CssToTsConverter {
                 }
                 switch (error.errno) {
                     case -4058:
-                        yield this.makeDirRecursively(this.tsDir);
+                        yield fs.mkdirp(this.tsDir);
                         break;
                     default: {
                         throw error;
                     }
                 }
             }
-            yield mz_1.fs.writeFile(tsPath, tsContent);
+            yield fs.writeFile(tsPath, tsContent);
             if (this.removeSource === true) {
-                yield mz_1.fs.unlink(cssPath);
+                yield fs.unlink(cssPath);
             }
             console.log(`TS file ${tsPath} successfully emitted.`);
-        });
-    }
-    makeDirRecursively(dirPath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                mkdirp(dirPath, (error, made) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    else {
-                        resolve(made);
-                    }
-                });
-            });
         });
     }
 }

@@ -1,2 +1,2 @@
 import { Options } from "./contracts";
-export declare var Arguments: Options;
+export declare const Arguments: Options;

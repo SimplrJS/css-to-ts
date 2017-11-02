@@ -8,5 +8,4 @@ export declare class CssToTsConverter {
     private removeSource;
     constructor(tsDir: string, tsFileName: string, cssDir: string, cssFileName: string, varName: string, header?: string | undefined, removeSource?: boolean | undefined);
     Convert(): Promise<void>;
-    private makeDirRecursively(dirPath);
 }

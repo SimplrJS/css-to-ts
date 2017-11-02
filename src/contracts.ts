@@ -15,3 +15,12 @@ export interface CssToTsOptions {
     header?: string;
     varName?: string | boolean;
 }
+
+export interface BasePackage {
+    name: string;
+    version: string;
+    description?: string;
+    main: string;
+    author?: string;
+    license?: string;
+}

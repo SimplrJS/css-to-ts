@@ -4,7 +4,7 @@ export interface Options extends CssToTsOptions {
     watch?: boolean;
     cwd?: string;
     delimiter?: string;
-    exclude?: Array<string>;
+    exclude?: string[];
 }
 export interface CssToTsOptions {
     rootDir: string;
@@ -13,4 +13,12 @@ export interface CssToTsOptions {
     prefix?: string;
     header?: string;
     varName?: string | boolean;
+}
+export interface BasePackage {
+    name: string;
+    version: string;
+    description?: string;
+    main: string;
+    author?: string;
+    license?: string;
 }
