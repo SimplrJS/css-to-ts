@@ -8,7 +8,7 @@ exports.CLIDefaults = {
     pattern: "**/*.css",
     rootDir: "./",
     outDir: "./",
-    delimitter: "-",
+    delimiter: "-",
     exclude: ["**/node_modules/**"]
 };
 function IsNodeError(error) {
