@@ -1,4 +1,4 @@
-import { Glob } from "glob";
+import * as globby from "globby";
 import * as path from "path";
 import { watch } from "chokidar";
 import { Options } from "./contracts";
@@ -27,33 +27,18 @@ export class CLIHandler {
 
     private async handleGlob(): Promise<void> {
         try {
-            const filesArray = await this.getFilesArray(this.options.pattern);
+            const cwd = path.join(this.options.cwd!, this.options.rootDir);
+            const filesArray = await globby(this.options.pattern, {
+                ignore: this.options.exclude,
+                cwd: cwd
+            });
+
             for (let i = 0; i < filesArray.length; i++) {
                 await this.convertFile(filesArray[i]);
             }
         } catch (error) {
             EmitError(error);
         }
-    }
-
-    private async getFilesArray(pattern: string): Promise<string[]> {
-        return new Promise<string[]>((resolve, reject) => {
-
-            // this.options.cwd resolved in `private async run()`
-            const cwd = path.join(this.options.cwd!, this.options.rootDir);
-            new Glob(pattern,
-                {
-                    ignore: this.options.exclude,
-                    cwd: cwd
-                },
-                (error, filesArray) => {
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(filesArray);
-                });
-        });
     }
 
     private watchCss(): void {
@@ -137,12 +122,17 @@ export class CLIHandler {
         const newFileName = this.constructFileName(fileName);
         const variableName = this.snakeCaseToCamelCase(newFileName);
 
-        if (variableName.length === 0) {
+        if (!this.isVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
 
         return variableName;
+    }
+
+    private isVarNameValid(varName: string): boolean {
+        const startsWithNumberRegex = new RegExp("^[0-9]", "ig");
+        return (varName.length > 0 && !startsWithNumberRegex.test(varName));
     }
 
     private constructFileName(fileName: string, extension?: string): string {

@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const glob_1 = require("glob");
+const globby = require("globby");
 const path = require("path");
 const chokidar_1 = require("chokidar");
 const css_to_ts_converter_1 = require("./css-to-ts-converter");
@@ -40,7 +40,11 @@ class CLIHandler {
     handleGlob() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const filesArray = yield this.getFilesArray(this.options.pattern);
+                const cwd = path.join(this.options.cwd, this.options.rootDir);
+                const filesArray = yield globby(this.options.pattern, {
+                    ignore: this.options.exclude,
+                    cwd: cwd
+                });
                 for (let i = 0; i < filesArray.length; i++) {
                     yield this.convertFile(filesArray[i]);
                 }
@@ -48,24 +52,6 @@ class CLIHandler {
             catch (error) {
                 helpers_1.EmitError(error);
             }
-        });
-    }
-    getFilesArray(pattern) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                // this.options.cwd resolved in `private async run()`
-                const cwd = path.join(this.options.cwd, this.options.rootDir);
-                new glob_1.Glob(pattern, {
-                    ignore: this.options.exclude,
-                    cwd: cwd
-                }, (error, filesArray) => {
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(filesArray);
-                });
-            });
         });
     }
     watchCss() {
@@ -121,11 +107,15 @@ class CLIHandler {
         }
         const newFileName = this.constructFileName(fileName);
         const variableName = this.snakeCaseToCamelCase(newFileName);
-        if (variableName.length === 0) {
+        if (!this.isVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
         return variableName;
+    }
+    isVarNameValid(varName) {
+        const startsWithNumberRegex = new RegExp("^[0-9]", "ig");
+        return (varName.length > 0 && !startsWithNumberRegex.test(varName));
     }
     constructFileName(fileName, extension) {
         if ((this.options.prefix || this.options.suffix) && !this.options.delimiter) {
