@@ -1,6 +1,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const os_1 = require("os");
-function ConvertCssToTs(stringifiedCss, variableName, headerComment, varType = "var") {
+const contracts_1 = require("./contracts");
+function ConvertCssToTs(stringifiedCss, variableName, headerComment, varType = contracts_1.VarType.Var) {
     let tsContent = "";
     if (headerComment) {
         tsContent += `// ${headerComment}${os_1.EOL}`;

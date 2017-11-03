@@ -5,7 +5,7 @@ export function ConvertCssToTs(
     stringifiedCss: string,
     variableName: string,
     headerComment?: string,
-    varType: VarType = "var"
+    varType: VarType = VarType.Var
 ): string {
     let tsContent = "";
 

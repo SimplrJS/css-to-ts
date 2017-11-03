@@ -71,7 +71,7 @@ class CLIHandler {
     }
     convertFile(filePath) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!validators_1.IsVarTypeValid(this.options.varType)) {
+            if (typeof this.options.varType === "string" && !validators_1.IsVarTypeValid(this.options.varType)) {
                 throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
                     `Valid values: \`var\`, \'let\', \`const\`.`);
             }
@@ -81,7 +81,6 @@ class CLIHandler {
             const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
             const varName = this.resolveVarName(filePathData.name);
             const tsFileName = this.constructFileName(filePathData.name, ".ts");
-            console.log(`"${this.options.varType}"`);
             const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource, this.options.varType);
             try {
                 yield converter.Convert();

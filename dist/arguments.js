@@ -61,7 +61,7 @@ exports.Arguments = yargs
     type: "string"
 })
     .option("varType", {
-    describe: "Specifies type of variable to be exported in TypeScript file. Valid values: `var`, `let`, `const`",
+    describe: "Specifies type of variable to be exported in TypeScript file. Valid values: `var`, `let`, `const`.",
     type: "string"
 })
     .argv;

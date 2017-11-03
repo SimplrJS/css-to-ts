@@ -14,7 +14,7 @@ export interface CssToTsOptions {
     prefix?: string;
     header?: string;
     varName?: string | boolean;
-    varType?: string | boolean;
+    varType?: string;
 }
 
 export interface BasePackage {
@@ -26,4 +26,8 @@ export interface BasePackage {
     license?: string;
 }
 
-export type VarType = "var" | "let" | "const";
+export enum VarType {
+    Var = "var",
+    Let = "let",
+    Const = "const"
+}

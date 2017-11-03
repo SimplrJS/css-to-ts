@@ -73,7 +73,7 @@ export class CLIHandler {
     }
 
     private async convertFile(filePath: string): Promise<void> {
-        if (!IsVarTypeValid(this.options.varType)) {
+        if (typeof this.options.varType === "string" && !IsVarTypeValid(this.options.varType)) {
             throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
                 `Valid values: \`var\`, \'let\', \`const\`.`);
         }
