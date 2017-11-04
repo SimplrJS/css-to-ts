@@ -6,5 +6,5 @@ export function IsVarNameValid(varName: string): boolean {
 }
 
 export function IsVarTypeValid(varType: string): varType is VarType {
-    return (varType === "const" || varType === "let" || varType === "var");
+    return (varType === VarType.Const || varType === VarType.Let || varType === VarType.Var);
 }
