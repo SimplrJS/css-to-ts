@@ -7,13 +7,13 @@ export function ConvertCssToTs(
     headerComment?: string,
     varType: VarType = VarType.Const
 ): string {
-    let tsContent = "";
+    let content = "";
 
     if (headerComment) {
-        tsContent += `// ${headerComment}${EOL}`;
+        content += `// ${headerComment}${EOL}`;
     }
 
-    tsContent += `export ${varType} ${variableName} = \`${stringifiedCss}\`;${EOL}`;
+    content += `export ${varType} ${variableName} = \`${stringifiedCss}\`;${EOL}`;
 
-    return tsContent;
+    return content;
 }
