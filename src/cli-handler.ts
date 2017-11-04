@@ -83,14 +83,14 @@ export class CLIHandler {
 
         // this.options.cwd resolved in `private async run()`
         const cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
-        const tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
+        const outputDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
         const varName = this.resolveVarName(filePathData.name);
-        const tsFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
+        const outputFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
 
         const converter = new CssToTsConverter(
-            tsDir,
-            tsFileName,
+            outputDir,
+            outputFileName,
             cssDir,
             filePathData.base,
             varName,
@@ -115,7 +115,7 @@ export class CLIHandler {
                 }
                 case -4075: {
                     EmitError("Cannot create directory that already exists. " +
-                        `Please Check TSDir and outDir. Message: ${error.message}`);
+                        `Please check outDir. Message: ${error.message}`);
                     break;
                 }
                 default: EmitError(error.message);

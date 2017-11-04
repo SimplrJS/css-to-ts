@@ -12,9 +12,9 @@ const path = require("path");
 const css_to_ts_1 = require("./css-to-ts");
 const helpers_1 = require("./helpers");
 class CssToTsConverter {
-    constructor(tsDir, tsFileName, cssDir, cssFileName, varName, header, removeSource, varType) {
-        this.tsDir = tsDir;
-        this.tsFileName = tsFileName;
+    constructor(outputDir, outputFileName, cssDir, cssFileName, varName, header, removeSource, varType) {
+        this.outputDir = outputDir;
+        this.outputFileName = outputFileName;
         this.cssDir = cssDir;
         this.cssFileName = cssFileName;
         this.varName = varName;
@@ -24,15 +24,15 @@ class CssToTsConverter {
     }
     Convert() {
         return __awaiter(this, void 0, void 0, function* () {
-            const tsPath = path.join(this.tsDir, this.tsFileName);
+            const outputPath = path.join(this.outputDir, this.outputFileName);
             const cssPath = path.join(this.cssDir, this.cssFileName);
             console.log(`Reading css from ${cssPath}.`);
             const stringifiedCss = yield fs.readFile(cssPath, "utf-8");
-            const tsContent = css_to_ts_1.ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
+            const content = css_to_ts_1.ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
             try {
-                const dirStats = yield fs.stat(this.tsDir);
+                const dirStats = yield fs.stat(this.outputDir);
                 if (!dirStats.isDirectory()) {
-                    helpers_1.EmitError(`Output directory ${this.tsDir} is not a directory.`);
+                    helpers_1.EmitError(`Output directory ${this.outputDir} is not a directory.`);
                     return;
                 }
             }
@@ -42,18 +42,18 @@ class CssToTsConverter {
                 }
                 switch (error.errno) {
                     case -4058:
-                        yield fs.mkdirp(this.tsDir);
+                        yield fs.mkdirp(this.outputDir);
                         break;
                     default: {
                         throw error;
                     }
                 }
             }
-            yield fs.writeFile(tsPath, tsContent);
+            yield fs.writeFile(outputPath, content);
             if (this.removeSource === true) {
                 yield fs.unlink(cssPath);
             }
-            console.log(`TS file ${tsPath} successfully emitted.`);
+            console.log(`Output file ${outputPath} successfully emitted.`);
         });
     }
 }

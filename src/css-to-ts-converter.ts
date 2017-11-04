@@ -6,8 +6,8 @@ import { VarType } from "./contracts";
 
 export class CssToTsConverter {
     constructor(
-        private tsDir: string,
-        private tsFileName: string,
+        private outputDir: string,
+        private outputFileName: string,
         private cssDir: string,
         private cssFileName: string,
         private varName: string,
@@ -17,17 +17,17 @@ export class CssToTsConverter {
     ) { }
 
     public async Convert(): Promise<void> {
-        const tsPath = path.join(this.tsDir, this.tsFileName);
+        const outputPath = path.join(this.outputDir, this.outputFileName);
         const cssPath = path.join(this.cssDir, this.cssFileName);
 
         console.log(`Reading css from ${cssPath}.`);
         const stringifiedCss = await fs.readFile(cssPath, "utf-8");
-        const tsContent = ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
+        const content = ConvertCssToTs(stringifiedCss, this.varName, this.header, this.varType);
 
         try {
-            const dirStats = await fs.stat(this.tsDir);
+            const dirStats = await fs.stat(this.outputDir);
             if (!dirStats.isDirectory()) {
-                EmitError(`Output directory ${this.tsDir} is not a directory.`);
+                EmitError(`Output directory ${this.outputDir} is not a directory.`);
                 return;
             }
         } catch (error) {
@@ -37,7 +37,7 @@ export class CssToTsConverter {
 
             switch (error.errno) {
                 case -4058:
-                    await fs.mkdirp(this.tsDir);
+                    await fs.mkdirp(this.outputDir);
                     break;
                 default: {
                     throw error;
@@ -45,12 +45,12 @@ export class CssToTsConverter {
             }
         }
 
-        await fs.writeFile(tsPath, tsContent);
+        await fs.writeFile(outputPath, content);
 
         if (this.removeSource === true) {
             await fs.unlink(cssPath);
         }
 
-        console.log(`TS file ${tsPath} successfully emitted.`);
+        console.log(`Output file ${outputPath} successfully emitted.`);
     }
 }
