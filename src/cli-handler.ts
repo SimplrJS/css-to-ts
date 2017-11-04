@@ -1,7 +1,7 @@
 import * as globby from "globby";
 import * as path from "path";
 import { watch } from "chokidar";
-import { Options } from "./contracts";
+import { CLIOptions } from "./contracts";
 import { CssToTsConverter } from "./css-to-ts-converter";
 import {
     EmitError,
@@ -12,13 +12,14 @@ import {
 import { IsVarTypeValid, IsVarNameValid } from "./validators";
 
 export class CLIHandler {
-    constructor(private options: Options) {
+    constructor(private options: CLIOptions) {
         this.options.cwd = this.options.cwd || process.cwd();
         this.options.rootDir = this.options.rootDir || CLIDefaults.rootDir;
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
         this.options.delimiter = this.options.delimiter || CLIDefaults.delimiter;
         this.options.exclude = this.options.exclude || CLIDefaults.exclude;
+        this.options.outExt = this.options.outExt || CLIDefaults.outExt;
 
         if (this.options.watch) {
             this.watchCss();
@@ -85,7 +86,7 @@ export class CLIHandler {
         const tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
         const varName = this.resolveVarName(filePathData.name);
-        const tsFileName = this.constructFileName(filePathData.name, ".ts");
+        const tsFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
 
         const converter = new CssToTsConverter(
             tsDir,

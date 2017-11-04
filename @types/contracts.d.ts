@@ -1,10 +1,11 @@
-export interface Options extends CssToTsOptions {
+export interface CLIOptions extends CssToTsOptions {
     removeSource?: boolean;
     pattern: string;
     watch?: boolean;
     cwd?: string;
     delimiter?: string;
     exclude?: string[];
+    outExt?: string;
 }
 export interface CssToTsOptions {
     rootDir: string;

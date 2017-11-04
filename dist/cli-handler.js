@@ -31,6 +31,7 @@ class CLIHandler {
         this.options.pattern = this.options.pattern || helpers_1.CLIDefaults.pattern;
         this.options.delimiter = this.options.delimiter || helpers_1.CLIDefaults.delimiter;
         this.options.exclude = this.options.exclude || helpers_1.CLIDefaults.exclude;
+        this.options.outExt = this.options.outExt || helpers_1.CLIDefaults.outExt;
         if (this.options.watch) {
             this.watchCss();
         }
@@ -80,7 +81,7 @@ class CLIHandler {
             const cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
             const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
             const varName = this.resolveVarName(filePathData.name);
-            const tsFileName = this.constructFileName(filePathData.name, ".ts");
+            const tsFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
             const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource, this.options.varType);
             try {
                 yield converter.Convert();

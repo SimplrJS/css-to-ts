@@ -1,7 +1,7 @@
-import { Options } from "./contracts";
+import { CLIOptions } from "./contracts";
 export declare class CLIHandler {
     private options;
-    constructor(options: Options);
+    constructor(options: CLIOptions);
     private handleGlob();
     private watchCss();
     private onWatchChange;
