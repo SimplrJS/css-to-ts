@@ -8,7 +8,7 @@ Compiles css files to importable TypeScript files.
 npm install css-to-ts -g
 ```
 
-Global installation is not necessary. You can install this package with 
+Global installation is not necessary. You can install this package with:
 
 ```sh
 npm install css-to-ts
@@ -38,6 +38,7 @@ css-to-ts -h
 | -v, --version                 | boolean   | `false`                   | Show current version.                                                         |
 | --rootDir                     | string    | `./`                      | Specifies the root directory of input files.                                  |
 | --outDir                      | string    | `./`                      | Redirect output structure to the directory.                                   |
+| --outExt                      | string    | `ts`                      | Specifies extension of output TypeScript file.                                |
 | --pattern                     | string    | `**/*.css`                | Files glob pattern.                                                           |
 | -w, --watch                   | boolean   | `false`                   | Watch for changes of input files.                                             |
 | --prefix                      | string    |                           | Prefix added to output file name.                                             |
@@ -48,6 +49,7 @@ css-to-ts -h
 | --cwd                         | string    | `process.cwd()`           | Specifies current working directory.                                          |
 | --exclude                     | array     | `["**/node_modules/**"]`  | Specifies an array of globs to exclude.                                       |
 | --varName                     | string    |                           | Specifies name of variable to be exported in TypeScript file.                 |
+| --varType                     | string    | `const`                   | Specifies type of variable to be exported in TypeScript file.                 |
 
 ## Example
 
@@ -68,7 +70,7 @@ Generated `./dist/orange.ts`:
 
 ```ts
 // File generated with css-to-ts
-export var Orange = `.orange {
+export const Orange = `.orange {
     color: orange;
     border: 1px solid yellow;
 }`;
@@ -77,7 +79,7 @@ export var Orange = `.orange {
 
 ## API
 
-### `ConvertCssToTs(stringifiedCss: string, variableName: string, headerComment?: string): string`
+### `ConvertCssToTs(stringifiedCss: string, variableName: string, headerComment?: string, varType: VarType = VarType.Const): string`
 
 Takes stringified css and outputs TypeScript code with exported string containing content of your css file.
 
@@ -92,8 +94,17 @@ import { ConvertCssToTs } from "css-to-ts";
 | `stringifiedCss`  | string | *        | Stringified css to be exported in TypeScript file.        |
 | `variableName`    | string | *        | Name of variable to be exported in TypeScript file.       |
 | `headerComment`   | string |          | Comment placed in the top of exported TypeScript file.    |
+| `varType`         | string |          | Type of variable to be exported in TypeScript file.       |
 
-### `new CssToTsConverter(tsDir, tsFileName, cssDir, cssFileName, varName, header, removeSource)`
+```ts
+export enum VarType {
+    Var = "var",
+    Let = "let",
+    Const = "const"
+}
+```
+
+### `new CssToTsConverter(outputDir, outputFileName, cssDir, cssFileName, varName, header, removeSource, varType)`
 
 Compiles css files to importable TypeScript files.
 
@@ -103,8 +114,8 @@ Usage:
 import { CssToTsConverter } from "css-to-ts";
 
 const converter = new CssToTsConverter(
-    tsDir,
-    tsFileName,
+    outputDir,
+    outputFileName,
     cssDir,
     cssFileName,
     varName,
@@ -121,13 +132,14 @@ try {
 
 | Constructor argument  | Type      | Required  | Description                                                   |
 |-----------------------|-----------|-----------|---------------------------------------------------------------|
-| `tsDir`               | string    | *         | Directory of TypeScript file.                                 |
-| `tsFileName`          | string    | *         | File name of TypeScript file.                                 |
+| `outputDir`           | string    | *         | Directory of output file.                                     |
+| `outputFileName`      | string    | *         | Name of output file.                                          |
 | `cssDir`              | string    | *         | Directory of css file.                                        |
 | `cssFileName`         | string    | *         | File name of css file.                                        |
 | `varName`             | string    | *         | Name of variable to be exported in TypeScript file.           |
 | `header`              | string    |           | Comment placed in the top of exported TypeScript file.        |
 | `removeSource`        | boolean   |           | Should css file be deleted after TypeScript file emitted.     |
+| `varType`             | VarType   |           | Type of variable to be exported in TypeScript file.           |
 
 ## License
 
