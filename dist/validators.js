@@ -7,6 +7,6 @@ function IsVarNameValid(varName) {
 exports.IsVarNameValid = IsVarNameValid;
 function IsVarTypeValid(varType) {
     const values = Object.values(contracts_1.VarType);
-    return (values.indexOf(varType) >= 0);
+    return (values.indexOf(varType) !== -1);
 }
 exports.IsVarTypeValid = IsVarTypeValid;
