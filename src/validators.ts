@@ -6,5 +6,6 @@ export function IsVarNameValid(varName: string): boolean {
 }
 
 export function IsVarTypeValid(varType: string): varType is VarType {
-    return (varType === VarType.Const || varType === VarType.Let || varType === VarType.Var);
+    const values = Object.values(VarType) as string[];
+    return (values.indexOf(varType) >= 0);
 }

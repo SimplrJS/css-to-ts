@@ -51,7 +51,7 @@
     "globby": "^6.1.0",
     "yargs": "^7.1.0"
   },
-  "engine": "node >= 5.0.0",
+  "engine": "node >= 7.5.0",
   "bin": {
     "css-to-ts": "./dist/cli.js"
   }

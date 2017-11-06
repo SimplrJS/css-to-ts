@@ -6,6 +6,7 @@ function IsVarNameValid(varName) {
 }
 exports.IsVarNameValid = IsVarNameValid;
 function IsVarTypeValid(varType) {
-    return (varType === contracts_1.VarType.Const || varType === contracts_1.VarType.Let || varType === contracts_1.VarType.Var);
+    const values = Object.values(contracts_1.VarType);
+    return (values.indexOf(varType) >= 0);
 }
 exports.IsVarTypeValid = IsVarTypeValid;
