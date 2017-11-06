@@ -1,10 +1,11 @@
-export interface Options extends CssToTsOptions {
+export interface CLIOptions extends CssToTsOptions {
     removeSource?: boolean;
     pattern: string;
     watch?: boolean;
     cwd?: string;
     delimiter?: string;
     exclude?: string[];
+    outExt?: string;
 }
 
 export interface CssToTsOptions {
@@ -14,6 +15,7 @@ export interface CssToTsOptions {
     prefix?: string;
     header?: string;
     varName?: string | boolean;
+    varType?: string;
 }
 
 export interface BasePackage {
@@ -23,4 +25,10 @@ export interface BasePackage {
     main: string;
     author?: string;
     license?: string;
+}
+
+export enum VarType {
+    Var = "var",
+    Let = "let",
+    Const = "const"
 }

@@ -7,11 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const glob_1 = require("glob");
+const globby = require("globby");
 const path = require("path");
 const chokidar_1 = require("chokidar");
 const css_to_ts_converter_1 = require("./css-to-ts-converter");
 const helpers_1 = require("./helpers");
+const validators_1 = require("./validators");
 class CLIHandler {
     constructor(options) {
         this.options = options;
@@ -30,6 +31,7 @@ class CLIHandler {
         this.options.pattern = this.options.pattern || helpers_1.CLIDefaults.pattern;
         this.options.delimiter = this.options.delimiter || helpers_1.CLIDefaults.delimiter;
         this.options.exclude = this.options.exclude || helpers_1.CLIDefaults.exclude;
+        this.options.outExt = this.options.outExt || helpers_1.CLIDefaults.outExt;
         if (this.options.watch) {
             this.watchCss();
         }
@@ -40,7 +42,11 @@ class CLIHandler {
     handleGlob() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const filesArray = yield this.getFilesArray(this.options.pattern);
+                const cwd = path.join(this.options.cwd, this.options.rootDir);
+                const filesArray = yield globby(this.options.pattern, {
+                    ignore: this.options.exclude,
+                    cwd: cwd
+                });
                 for (let i = 0; i < filesArray.length; i++) {
                     yield this.convertFile(filesArray[i]);
                 }
@@ -48,24 +54,6 @@ class CLIHandler {
             catch (error) {
                 helpers_1.EmitError(error);
             }
-        });
-    }
-    getFilesArray(pattern) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                // this.options.cwd resolved in `private async run()`
-                const cwd = path.join(this.options.cwd, this.options.rootDir);
-                new glob_1.Glob(pattern, {
-                    ignore: this.options.exclude,
-                    cwd: cwd
-                }, (error, filesArray) => {
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(filesArray);
-                });
-            });
         });
     }
     watchCss() {
@@ -84,13 +72,17 @@ class CLIHandler {
     }
     convertFile(filePath) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (typeof this.options.varType === "string" && !validators_1.IsVarTypeValid(this.options.varType)) {
+                throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
+                    `Valid values: \`var\`, \'let\', \`const\`.`);
+            }
             const filePathData = path.parse(filePath);
             // this.options.cwd resolved in `private async run()`
             const cssDir = path.join(this.options.cwd, this.options.rootDir, filePathData.dir);
-            const tsDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
+            const outputDir = path.join(this.options.cwd, this.options.outDir, filePathData.dir);
             const varName = this.resolveVarName(filePathData.name);
-            const tsFileName = this.constructFileName(filePathData.name, ".ts");
-            const converter = new css_to_ts_converter_1.CssToTsConverter(tsDir, tsFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource);
+            const outputFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
+            const converter = new css_to_ts_converter_1.CssToTsConverter(outputDir, outputFileName, cssDir, filePathData.base, varName, this.options.header, this.options.removeSource, this.options.varType);
             try {
                 yield converter.Convert();
             }
@@ -107,7 +99,7 @@ class CLIHandler {
                     }
                     case -4075: {
                         helpers_1.EmitError("Cannot create directory that already exists. " +
-                            `Please Check TSDir and outDir. Message: ${error.message}`);
+                            `Please check outDir. Message: ${error.message}`);
                         break;
                     }
                     default: helpers_1.EmitError(error.message);
@@ -120,8 +112,8 @@ class CLIHandler {
             return this.options.varName;
         }
         const newFileName = this.constructFileName(fileName);
-        const variableName = this.snakeCaseToCamelCase(newFileName);
-        if (variableName.length === 0) {
+        const variableName = helpers_1.SnakeCaseToCamelCase(newFileName);
+        if (!validators_1.IsVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
@@ -141,11 +133,6 @@ class CLIHandler {
         }
         newName += extension || "";
         return newName;
-    }
-    snakeCaseToCamelCase(fileName) {
-        const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match, word, delimiter) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
-        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }
 exports.CLIHandler = CLIHandler;

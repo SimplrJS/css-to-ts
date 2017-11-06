@@ -1,9 +1,8 @@
-import { Options } from "./contracts";
+import { CLIOptions } from "./contracts";
 export declare class CLIHandler {
     private options;
-    constructor(options: Options);
+    constructor(options: CLIOptions);
     private handleGlob();
-    private getFilesArray(pattern);
     private watchCss();
     private onWatchChange;
     private onWatchError;
@@ -11,5 +10,4 @@ export declare class CLIHandler {
     private convertFile(filePath);
     private resolveVarName(fileName);
     private constructFileName(fileName, extension?);
-    private snakeCaseToCamelCase(fileName);
 }

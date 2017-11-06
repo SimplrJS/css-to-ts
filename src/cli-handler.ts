@@ -1,22 +1,25 @@
-import { Glob } from "glob";
+import * as globby from "globby";
 import * as path from "path";
 import { watch } from "chokidar";
-import { Options } from "./contracts";
+import { CLIOptions } from "./contracts";
 import { CssToTsConverter } from "./css-to-ts-converter";
 import {
     EmitError,
     CLIDefaults,
-    IsNodeError
+    IsNodeError,
+    SnakeCaseToCamelCase
 } from "./helpers";
+import { IsVarTypeValid, IsVarNameValid } from "./validators";
 
 export class CLIHandler {
-    constructor(private options: Options) {
+    constructor(private options: CLIOptions) {
         this.options.cwd = this.options.cwd || process.cwd();
         this.options.rootDir = this.options.rootDir || CLIDefaults.rootDir;
         this.options.outDir = this.options.outDir || CLIDefaults.outDir;
         this.options.pattern = this.options.pattern || CLIDefaults.pattern;
         this.options.delimiter = this.options.delimiter || CLIDefaults.delimiter;
         this.options.exclude = this.options.exclude || CLIDefaults.exclude;
+        this.options.outExt = this.options.outExt || CLIDefaults.outExt;
 
         if (this.options.watch) {
             this.watchCss();
@@ -27,33 +30,18 @@ export class CLIHandler {
 
     private async handleGlob(): Promise<void> {
         try {
-            const filesArray = await this.getFilesArray(this.options.pattern);
+            const cwd = path.join(this.options.cwd!, this.options.rootDir);
+            const filesArray = await globby(this.options.pattern, {
+                ignore: this.options.exclude,
+                cwd: cwd
+            });
+
             for (let i = 0; i < filesArray.length; i++) {
                 await this.convertFile(filesArray[i]);
             }
         } catch (error) {
             EmitError(error);
         }
-    }
-
-    private async getFilesArray(pattern: string): Promise<string[]> {
-        return new Promise<string[]>((resolve, reject) => {
-
-            // this.options.cwd resolved in `private async run()`
-            const cwd = path.join(this.options.cwd!, this.options.rootDir);
-            new Glob(pattern,
-                {
-                    ignore: this.options.exclude,
-                    cwd: cwd
-                },
-                (error, filesArray) => {
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(filesArray);
-                });
-        });
     }
 
     private watchCss(): void {
@@ -86,23 +74,29 @@ export class CLIHandler {
     }
 
     private async convertFile(filePath: string): Promise<void> {
+        if (typeof this.options.varType === "string" && !IsVarTypeValid(this.options.varType)) {
+            throw new Error(`\"${this.options.varType}\" is not a valid TypeScript variable type. ` +
+                `Valid values: \`var\`, \'let\', \`const\`.`);
+        }
+
         const filePathData = path.parse(filePath);
 
         // this.options.cwd resolved in `private async run()`
         const cssDir = path.join(this.options.cwd!, this.options.rootDir, filePathData.dir);
-        const tsDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
+        const outputDir = path.join(this.options.cwd!, this.options.outDir, filePathData.dir);
 
         const varName = this.resolveVarName(filePathData.name);
-        const tsFileName = this.constructFileName(filePathData.name, ".ts");
+        const outputFileName = this.constructFileName(filePathData.name, `.${this.options.outExt}`);
 
         const converter = new CssToTsConverter(
-            tsDir,
-            tsFileName,
+            outputDir,
+            outputFileName,
             cssDir,
             filePathData.base,
             varName,
             this.options.header,
-            this.options.removeSource
+            this.options.removeSource,
+            this.options.varType
         );
 
         try {
@@ -121,7 +115,7 @@ export class CLIHandler {
                 }
                 case -4075: {
                     EmitError("Cannot create directory that already exists. " +
-                        `Please Check TSDir and outDir. Message: ${error.message}`);
+                        `Please check outDir. Message: ${error.message}`);
                     break;
                 }
                 default: EmitError(error.message);
@@ -135,9 +129,9 @@ export class CLIHandler {
         }
 
         const newFileName = this.constructFileName(fileName);
-        const variableName = this.snakeCaseToCamelCase(newFileName);
+        const variableName = SnakeCaseToCamelCase(newFileName);
 
-        if (variableName.length === 0) {
+        if (!IsVarNameValid(variableName)) {
             throw new Error(`Cannot construct TypeScript variable name from file name "${fileName}".` +
                 "If you cannot change variable name, please use --varName argument to define a valid TypeScript variable name.");
         }
@@ -164,13 +158,5 @@ export class CLIHandler {
 
         newName += extension || "";
         return newName;
-    }
-
-    private snakeCaseToCamelCase(fileName: string): string {
-        const regex = /(\w*)(\-*)/g;
-        const camelCasedFileName = fileName.replace(regex, (match: string, word: string, delimiter: string) =>
-            word.charAt(0).toUpperCase() + word.substr(1).toLowerCase());
-
-        return camelCasedFileName.replace(/[^0-9a-z]/gi, "");
     }
 }

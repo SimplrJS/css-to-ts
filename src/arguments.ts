@@ -1,7 +1,7 @@
 import * as yargs from "yargs";
 import * as path from "path";
 import * as fs from "fs-extra";
-import { Options, BasePackage } from "./contracts";
+import { CLIOptions, BasePackage } from "./contracts";
 
 function GetVersion(): string {
     const packageData = fs.readJSONSync(path.join(__dirname, "../package.json")) as BasePackage;
@@ -62,4 +62,12 @@ export const Arguments = yargs
         describe: "Specifies name of variable to be exported in TypeScript file.",
         type: "string"
     })
-    .argv as Options;
+    .option("varType", {
+        describe: "Specifies type of variable to be exported in TypeScript file. Valid values: `var`, `let`, `const`.",
+        type: "string"
+    })
+    .option("outExt", {
+        describe: "Specifies extension of output TypeScript file.",
+        type: "string"
+    })
+    .argv as CLIOptions;

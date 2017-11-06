@@ -13,7 +13,11 @@
         "strictNullChecks": true,
         "skipDefaultLibCheck": true,
         "declaration": true,
-        "declarationDir": "@types"
+        "declarationDir": "@types",
+        "lib": [
+            "es6", 
+            "es2017.object"
+        ]
     },
     "exclude": [
         "node_modules",

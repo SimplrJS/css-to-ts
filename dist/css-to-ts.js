@@ -1,11 +1,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const os_1 = require("os");
-function ConvertCssToTs(stringifiedCss, variableName, headerComment) {
-    let tsContent = "";
+const contracts_1 = require("./contracts");
+function ConvertCssToTs(stringifiedCss, variableName, headerComment, varType = contracts_1.VarType.Const) {
+    let content = "";
     if (headerComment) {
-        tsContent += `// ${headerComment}${os_1.EOL}`;
+        content += `// ${headerComment}${os_1.EOL}`;
     }
-    tsContent += `export var ${variableName} = \`${stringifiedCss}\`;${os_1.EOL}`;
-    return tsContent;
+    content += `export ${varType} ${variableName} = \`${stringifiedCss}\`;${os_1.EOL}`;
+    return content;
 }
 exports.ConvertCssToTs = ConvertCssToTs;

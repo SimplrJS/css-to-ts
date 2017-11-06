@@ -1,2 +1,2 @@
-import { Options } from "./contracts";
-export declare const Arguments: Options;
+import { CLIOptions } from "./contracts";
+export declare const Arguments: CLIOptions;

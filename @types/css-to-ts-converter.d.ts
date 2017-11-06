@@ -1,11 +1,13 @@
+import { VarType } from "./contracts";
 export declare class CssToTsConverter {
-    private tsDir;
-    private tsFileName;
+    private outputDir;
+    private outputFileName;
     private cssDir;
     private cssFileName;
     private varName;
     private header;
     private removeSource;
-    constructor(tsDir: string, tsFileName: string, cssDir: string, cssFileName: string, varName: string, header?: string | undefined, removeSource?: boolean | undefined);
+    private varType;
+    constructor(outputDir: string, outputFileName: string, cssDir: string, cssFileName: string, varName: string, header?: string | undefined, removeSource?: boolean | undefined, varType?: VarType | undefined);
     Convert(): Promise<void>;
 }
