@@ -15,7 +15,8 @@
         "declaration": true,
         "declarationDir": "@types",
         "lib": [
-            "es2017"
+            "es6", 
+            "es2017.object"
         ]
     },
     "exclude": [
